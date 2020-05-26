@@ -16,17 +16,25 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+    const greetings =
+        ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+    let happy = false;
+        
+    while(!happy){
+        // Pick a random greeting.
+        const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-  // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
-
-  // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.innerText = greeting;
+        // Add it to the page.
+        const greetingContainer = document.getElementById('greeting-container');
+        happy = confirm(greeting);
+        if(happy){
+            greetingContainer.innerText = greeting;
+        }
+    }
 }
 
 function visitLink(s){
     window.location.href=s;
 }
+
+
