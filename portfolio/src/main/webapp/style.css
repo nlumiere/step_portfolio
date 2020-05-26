@@ -2,6 +2,9 @@
   margin-left: auto;
   margin-right: auto;
   width: 650px;
+  background-color: #dddddd;
+  padding: 0px 20px;
+  padding-bottom:10px;
 }
 
 #pic {
@@ -9,6 +12,19 @@
     height: 300px;
     float:left;
     margin-right: 20px;
+    margin-left:20px;
+}
+
+.button {
+    width:100px;
+    padding: 10px 20px;
+    background-color: #555577;
+    margin-right: 10px;
+    color:white;
+    text-align:center;
+    font-size:16px;
+    display:inline-block;
+    align-self: center;
 }
 
 #greeting-container {
