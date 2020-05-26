@@ -4,6 +4,13 @@
   width: 650px;
 }
 
+#pic {
+    width: 300px;
+    height: 300px;
+    float:left;
+    margin-right: 20px;
+}
+
 #greeting-container {
   margin-top: 20px;
 }
