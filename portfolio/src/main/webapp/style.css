@@ -59,3 +59,9 @@
     display:inline-block;
     border:none;
 }
+
+.piece {
+    width:75px;
+    height:75px;
+    position:absolute;
+}

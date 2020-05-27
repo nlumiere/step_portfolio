@@ -62,7 +62,7 @@ function writeHTMLString(b){
 
 //Sets all of the pieces on the board
 //Parameter is isWhite
-function initializePieces(){
+function initializePieces(b){
     //black pieces
     b.row[0][0].piece = new Rook(false);
     b.row[0][1].piece = new Knight(false);
@@ -89,6 +89,16 @@ function initializePieces(){
         b.row[6][ii] = new Pawn(true);
     }
 
+    //returns list of squares with pieces
+    var pieceSquares = new Array(32);
+    for(let ii = 0; ii < 8; ii++){
+        pieceSquares[4*ii+0] = b.row[0][ii];
+        pieceSquares[4*ii+1] = b.row[1][ii];
+        pieceSquares[4*ii+2] = b.row[6][ii];
+        pieceSquares[4*ii+3] = b.row[7][ii];
+    }
+    return pieceSquares;
+
 }
 
 function generateBoard(){
@@ -98,6 +108,7 @@ function generateBoard(){
     //Draws board per htmlString
     boardContainer.innerHTML = writeHTMLString(b);    
     
+    pieceSquares = initializePieces(b);
 }
 
 class Board{
@@ -131,9 +142,8 @@ class Square{
 }
 
 class Piece{
-    constructor(isWhite){
+    constructor(isWhite, b, s){
         this.isWhite = isWhite;
-        
     }
     move(row, col){
         return false;
@@ -156,10 +166,10 @@ class Knight extends Piece{
     constructor(isWhite){
         super(isWhite);
         if(isWhite){
-            this.image = 'images/whiteknight';
+            this.image = 'images/whiteknight.png';
         }
         else{
-            this.image = 'images/blackknight';
+            this.image = 'images/blackknight.png';
         }
     }
 }
@@ -168,10 +178,10 @@ class Bishop extends Piece{
     constructor(isWhite){
         super(isWhite);
         if(isWhite){
-            this.image = 'images/whitebishop';
+            this.image = 'images/whitebishop.png';
         }
         else{
-            this.image = 'images/blackbishop';
+            this.image = 'images/blackbishop.png';
         }
     }
 }
@@ -192,10 +202,10 @@ class King extends Piece{
     constructor(isWhite){
         super(isWhite);
         if(isWhite){
-            this.image = 'images/whiteking';
+            this.image = 'images/whiteking.png';
         }
         else{
-            this.image = 'images/blackking';
+            this.image = 'images/blackking.png';
         }
     }
 }
@@ -204,10 +214,10 @@ class Queen extends Piece{
     constructor(isWhite){
         super(isWhite);
         if(isWhite){
-            this.image = 'images/whitequeen';
+            this.image = 'images/whitequeen.png';
         }
         else{
-            this.image = 'images/blackqueen';
+            this.image = 'images/blackqueen.png';
         }
     }
 }
