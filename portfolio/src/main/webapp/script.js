@@ -47,9 +47,11 @@ function writeHTMLString(b){
     for(let ii = 0; ii < 8 /* static size of board */; ii++){
         for(let jj = 0; jj < 8 /* static size of board */; jj++){
             if(b.row[ii][jj].color == 'white')
-                htmlString += '<button class = "white-square"></button>';
+                htmlString += '<button class = "white-square" onclick="b.squareClicked(b.row[' + 
+                    ii + '][' + jj + '])"></button>';
             else
-                htmlString += '<button class = "black-square"></button>';
+                htmlString += '<button class = "black-square" onclick="b.squareClicked(b.row[' + 
+                    ii + '][' + jj + '])"></button>';
         }
         // htmlString += '<br />';
     }
@@ -77,6 +79,10 @@ class Board{
             }
         }
     }
+
+    squareClicked(s){
+        alert(s.row + ' ' + s.col);
+    }
 }
 
 class Square{
@@ -90,6 +96,10 @@ class Square{
             this.color = 'black';
         }
         this.piece = null;
+    }
+
+    setPiece(p){
+        this.piece = p;
     }
 }
 
