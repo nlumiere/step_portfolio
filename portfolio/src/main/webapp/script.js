@@ -60,6 +60,37 @@ function writeHTMLString(b){
     return htmlString;
 }
 
+//Sets all of the pieces on the board
+//Parameter is isWhite
+function initializePieces(){
+    //black pieces
+    b.row[0][0].piece = new Rook(false);
+    b.row[0][1].piece = new Knight(false);
+    b.row[0][2].piece = new Bishop(false);
+    b.row[0][3].piece = new Queen(false);
+    b.row[0][4].piece = new King(false);
+    b.row[0][5].piece = new Bishop(false);
+    b.row[0][6].piece = new Knight(false);
+    b.row[0][7].piece = new Rook(false);
+
+    //white pieces
+    b.row[7][0].piece = new Rook(true);
+    b.row[7][1].piece = new Knight(true);
+    b.row[7][2].piece = new Bishop(true);
+    b.row[7][3].piece = new Queen(true);
+    b.row[7][4].piece = new King(true);
+    b.row[7][5].piece = new Bishop(true);
+    b.row[7][6].piece = new Knight(true);
+    b.row[7][7].piece = new Rook(true);
+
+    //pawns
+    for(let ii = 0; ii < 8; ii++){
+        b.row[1][ii] = new Pawn(false);
+        b.row[6][ii] = new Pawn(true);
+    }
+
+}
+
 function generateBoard(){
     const boardContainer = document.getElementById('board-container');
     b = new Board();
@@ -97,16 +128,11 @@ class Square{
         }
         this.piece = null;
     }
-
-    setPiece(p){
-        this.piece = p;
-    }
 }
 
 class Piece{
-    constructor(row, col){
-        this.row = row;
-        this.col = col;
+    constructor(isWhite){
+        this.isWhite = isWhite;
     }
 
     move(row, col){
