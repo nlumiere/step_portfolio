@@ -133,46 +133,82 @@ class Square{
 class Piece{
     constructor(isWhite){
         this.isWhite = isWhite;
+        
     }
-
     move(row, col){
         return false;
     }
 }
 
 class Pawn extends Piece{
-    move(row, col){
-
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whitepawn.png';
+        }
+        else{
+            this.image = 'images/blackpawn.png';
+        }
     }
 }
 
 class Knight extends Piece{
-    move(row, col){
-
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whiteknight';
+        }
+        else{
+            this.image = 'images/blackknight';
+        }
     }
 }
 
 class Bishop extends Piece{
-    move(row, col){
-        
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whitebishop';
+        }
+        else{
+            this.image = 'images/blackbishop';
+        }
     }
 }
 
 class Rook extends Piece{
-    move(row, col){
-
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whiterook';
+        }
+        else{
+            this.image = 'images/blackrook';
+        }
     }
 }
 
 class King extends Piece{
-    move(row, col){
-
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whiteking';
+        }
+        else{
+            this.image = 'images/blackking';
+        }
     }
 }
 
 class Queen extends Piece{
-    move(row, col){
-
+    constructor(isWhite){
+        super(isWhite);
+        if(isWhite){
+            this.image = 'images/whitequeen';
+        }
+        else{
+            this.image = 'images/blackqueen';
+        }
     }
 }
 
