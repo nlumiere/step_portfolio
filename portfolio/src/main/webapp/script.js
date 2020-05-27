@@ -40,9 +40,58 @@ function visitLink(s){
 function generateBoard(){
     const boardContainer = document.getElementById('board-container');
     boardContainer.innerHTML = '<div id = "board"></div>'
-    var col = new Array(8);
-    for(let ii = 0; ii < 8; ii++){
-        var row = new Array(8);
+}
+
+class Board{
+    constructor(){
+        this.col = new Array(8);
+    }
+}
+
+class Piece{
+    constructor(row, col){
+        this.row = row;
+        this.col = col;
+    }
+
+    move(row, col){
+        return false;
+    }
+}
+
+class Pawn extends Piece{
+    move(row, col){
+
+    }
+}
+
+class Knight extends Piece{
+    move(row, col){
+
+    }
+}
+
+class Bishop extends Piece{
+    move(row, col){
+        
+    }
+}
+
+class Rook extends Piece{
+    move(row, col){
+
+    }
+}
+
+class King extends Piece{
+    move(row, col){
+
+    }
+}
+
+class Queen extends Piece{
+    move(row, col){
+        
     }
 }
 
