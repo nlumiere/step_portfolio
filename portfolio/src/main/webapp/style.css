@@ -35,3 +35,11 @@
 #greeting-container {
   margin-top: 20px;
 }
+
+#board {
+    width: 600px;
+    height: 600px;
+    background-color: white;
+    margin:10px auto;
+    border:10px solid black;
+}

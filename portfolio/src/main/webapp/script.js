@@ -37,4 +37,13 @@ function visitLink(s){
     window.location.href=s;
 }
 
+function generateBoard(){
+    const boardContainer = document.getElementById('board-container');
+    boardContainer.innerHTML = '<div id = "board"></div>'
+    var col = new Array(8);
+    for(let ii = 0; ii < 8; ii++){
+        var row = new Array(8);
+    }
+}
+
 
