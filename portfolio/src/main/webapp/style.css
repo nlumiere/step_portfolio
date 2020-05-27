@@ -36,10 +36,26 @@
   margin-top: 20px;
 }
 
-#board {
+#board{
     width: 600px;
     height: 600px;
-    background-color: white;
     margin:10px auto;
     border:10px solid black;
+    font-size: 0px;
+}
+
+.white-square {
+    width:12.5%;
+    height:12.5%;
+    background-color: white;
+    display:inline-block;
+    border:none;
+}
+
+.black-square {
+    width:12.5%;
+    height:12.5%;
+    background-color:gray;
+    display:inline-block;
+    border:none;
 }

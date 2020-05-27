@@ -18,15 +18,19 @@
 function addRandomGreeting() {
     const greetings =
         ['Hello world!', '¡Hola Mundo!', '你好，世界！', 'Bonjour le monde!'];
+
+    //declares necessary container to display greeting
+    const greetingContainer = document.getElementById('greeting-container');
     let happy = false;
-        
+    
+    //Loops until the user is happy with the greeting, then displays the greeting text
     while(!happy){
         // Pick a random greeting.
         const greeting = greetings[Math.floor(Math.random() * greetings.length)];
 
-        // Add it to the page.
-        const greetingContainer = document.getElementById('greeting-container');
         happy = confirm(greeting);
+        
+        //Just to remain in scope
         if(happy){
             greetingContainer.innerText = greeting;
         }
@@ -37,14 +41,55 @@ function visitLink(s){
     window.location.href=s;
 }
 
+//Writes a string of html
+function writeHTMLString(b){
+    htmlString = '<div id = "board">';
+    for(let ii = 0; ii < 8 /* static size of board */; ii++){
+        for(let jj = 0; jj < 8 /* static size of board */; jj++){
+            if(b.row[ii][jj].color == 'white')
+                htmlString += '<button class = "white-square"></button>';
+            else
+                htmlString += '<button class = "black-square"></button>';
+        }
+        // htmlString += '<br />';
+    }
+    htmlString += '</div>';
+
+    return htmlString;
+}
+
 function generateBoard(){
     const boardContainer = document.getElementById('board-container');
-    boardContainer.innerHTML = '<div id = "board"></div>'
+    b = new Board();
+
+    //Draws board per htmlString
+    boardContainer.innerHTML = writeHTMLString(b);    
+    
 }
 
 class Board{
     constructor(){
-        this.col = new Array(8);
+        this.row = new Array(8);
+        for(let ii = 0; ii < 8; ii++){
+            this.row[ii] = new Array(8);
+            for(let jj = 0; jj < 8; jj++){
+                this.row[ii][jj] = new Square(ii, jj);
+            }
+        }
+    }
+}
+
+class Square{
+    constructor(row, col){
+        this.row = row;
+        this.col = col;
+        if((row + col)%2 == 0){
+            this.color = 'white';
+        }
+        else{
+            this.color = 'black';
+        }
+        this.piece = null;
     }
 }
 
@@ -91,7 +136,7 @@ class King extends Piece{
 
 class Queen extends Piece{
     move(row, col){
-        
+
     }
 }
 
