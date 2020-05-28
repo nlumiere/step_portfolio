@@ -64,4 +64,6 @@
     width:75px;
     height:75px;
     position:absolute;
+    background: transparent;
+    pointer-events: none;
 }
