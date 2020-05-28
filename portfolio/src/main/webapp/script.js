@@ -128,6 +128,11 @@ function placePieces(boardElem, pieceSquares){
         tempPiece.className = "piece-element";
         pieceElems[ii] = tempPiece;
         boardElem.appendChild(tempPiece);
+        tempPiece.style.marginLeft = "-" + 
+            ((8 - pieceSquares[ii].piece.col)*75) + "px";
+        tempPiece.style.marginTop = "-" + 
+            ((7 - pieceSquares[ii].piece.row)*75) + "px";
+        
     }
 
     return pieceElems;
