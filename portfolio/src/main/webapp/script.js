@@ -48,8 +48,9 @@ function visitLink(s){
 //Writes a string of html
 function writeHTMLString(b){
     htmlString = '<div id = "board">';
-    for(let ii = 0; ii < 8 /* static size of board */; ii++){
-        for(let jj = 0; jj < 8 /* static size of board */; jj++){
+    var ii, jj;
+    for(ii = 0; ii < 8 /* static size of board */; ii++){
+        for(jj = 0; jj < 8 /* static size of board */; jj++){
             if(b.row[ii][jj].color == 'white')
                 htmlString += '<button class = "white-square" onclick="b.squareClicked(b.row[' + 
                     ii + '][' + jj + '])"></button>';
@@ -88,41 +89,48 @@ function initializePieces(b){
     b.row[7][7].piece = new Rook(true);
 
     //pawns
-    for(let ii = 0; ii < 8; ii++){
-        b.row[1][ii] = new Pawn(false);
-        b.row[6][ii] = new Pawn(true);
+    var jj;
+    for(jj = 0; jj < 8; jj++){
+        b.row[1][jj].piece = new Pawn(false);
+        b.row[6][jj].piece = new Pawn(true);
     }
 
     //returns list of squares with pieces
     var pieceSquares = new Array(32);
-    for(let ii = 0; ii < 8; ii++){
+    var ii;
+    for(ii = 0; ii < 8; ii++){
         pieceSquares[4*ii+0] = b.row[0][ii];
         pieceSquares[4*ii+1] = b.row[1][ii];
         pieceSquares[4*ii+2] = b.row[6][ii];
         pieceSquares[4*ii+3] = b.row[7][ii];
     }
 
-    alert(pieceSquares[0].piece.image);
+    // var kk;
+    // for(kk = 0; kk < 32; kk++){
+    //     console.log(pieceSquares[kk].piece.image);
+    // }
 
     return pieceSquares;
 
 }
 
 //Initializes piece elements and returns array of all pieces
-function placePieces(pieceSquares){
+function placePieces(boardContainer, pieceSquares){
     var pieceElems = new Array(32);
-    let counter = 0;
-    alert(pieceSquares[0].piece.image);
 
-    // for(p in pieceSquares){
-    //     var tempPiece = document.createElement("img");
-    //     tempPiece.setAttribute("src", p.piece.image);
-    //     tempPiece.className = "piece-element";
-    //     pieceElems[counter] = tempPiece;
-    //     counter++;
-    // }
+    var ii;
+    for(ii = 0; ii < 32; ii++){
+        var tempPiece = document.createElement("img");
 
-    // return pieceElems;
+        console.log("adding " + pieceSquares[ii].piece.image);
+
+        tempPiece.src = pieceSquares[ii].piece.image;
+        tempPiece.className = "piece-element";
+        pieceElems[ii] = tempPiece;
+        boardContainer.appendChild(tempPiece);
+    }
+
+    return pieceElems;
 }
 
 function generateBoard(){
@@ -134,13 +142,13 @@ function generateBoard(){
     
     //pieceSquares and pieceElems used together to control all behavior of pieces
     pieceSquares = initializePieces(b);
-    alert(pieceSquares[0].piece.image);
     pieceElems = placePieces(boardContainer, pieceSquares);
 }
 
 class Board{
     constructor(){
         this.row = new Array(8);
+        var ii, jj;
         for(let ii = 0; ii < 8; ii++){
             this.row[ii] = new Array(8);
             for(let jj = 0; jj < 8; jj++){
@@ -167,6 +175,7 @@ class Square{
         this.piece = null;
     }
 }
+
 
 
 
