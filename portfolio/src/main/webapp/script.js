@@ -69,30 +69,30 @@ function writeHTMLString(b){
 //Parameter is isWhite
 function initializePieces(b){
     //black pieces
-    b.row[0][0].piece = new Rook(false);
-    b.row[0][1].piece = new Knight(false);
-    b.row[0][2].piece = new Bishop(false);
-    b.row[0][3].piece = new Queen(false);
-    b.row[0][4].piece = new King(false);
-    b.row[0][5].piece = new Bishop(false);
-    b.row[0][6].piece = new Knight(false);
-    b.row[0][7].piece = new Rook(false);
+    b.row[0][0].piece = new Rook(false, 0, 0);
+    b.row[0][1].piece = new Knight(false, 0, 1);
+    b.row[0][2].piece = new Bishop(false, 0, 2);
+    b.row[0][3].piece = new Queen(false, 0, 3);
+    b.row[0][4].piece = new King(false, 0, 4);
+    b.row[0][5].piece = new Bishop(false, 0, 5);
+    b.row[0][6].piece = new Knight(false, 0, 6);
+    b.row[0][7].piece = new Rook(false, 0, 7);
 
     //white pieces
-    b.row[7][0].piece = new Rook(true);
-    b.row[7][1].piece = new Knight(true);
-    b.row[7][2].piece = new Bishop(true);
-    b.row[7][3].piece = new Queen(true);
-    b.row[7][4].piece = new King(true);
-    b.row[7][5].piece = new Bishop(true);
-    b.row[7][6].piece = new Knight(true);
-    b.row[7][7].piece = new Rook(true);
+    b.row[7][0].piece = new Rook(true, 7, 0);
+    b.row[7][1].piece = new Knight(true, 7, 1);
+    b.row[7][2].piece = new Bishop(true, 7, 2);
+    b.row[7][3].piece = new Queen(true, 7, 3);
+    b.row[7][4].piece = new King(true, 7, 4);
+    b.row[7][5].piece = new Bishop(true, 7, 5);
+    b.row[7][6].piece = new Knight(true, 7, 6);
+    b.row[7][7].piece = new Rook(true, 7, 7);
 
     //pawns
     var jj;
     for(jj = 0; jj < 8; jj++){
-        b.row[1][jj].piece = new Pawn(false);
-        b.row[6][jj].piece = new Pawn(true);
+        b.row[1][jj].piece = new Pawn(false, 1, jj);
+        b.row[6][jj].piece = new Pawn(true, 6, jj);
     }
 
     //returns list of squares with pieces
@@ -115,7 +115,7 @@ function initializePieces(b){
 }
 
 //Initializes piece elements and returns array of all pieces
-function placePieces(boardContainer, pieceSquares){
+function placePieces(boardElem, pieceSquares){
     var pieceElems = new Array(32);
 
     var ii;
@@ -127,7 +127,7 @@ function placePieces(boardContainer, pieceSquares){
         tempPiece.src = pieceSquares[ii].piece.image;
         tempPiece.className = "piece-element";
         pieceElems[ii] = tempPiece;
-        boardContainer.appendChild(tempPiece);
+        boardElem.appendChild(tempPiece);
     }
 
     return pieceElems;
@@ -139,10 +139,12 @@ function generateBoard(){
 
     //Draws board per htmlString
     boardContainer.innerHTML = writeHTMLString(b);
+    //Now that writeHTMLString() has been called, an object with id board exists
+    const boardElem = document.getElementById('board');
     
     //pieceSquares and pieceElems used together to control all behavior of pieces
     pieceSquares = initializePieces(b);
-    pieceElems = placePieces(boardContainer, pieceSquares);
+    pieceElems = placePieces(boardElem, pieceSquares);
 }
 
 class Board{
@@ -180,8 +182,10 @@ class Square{
 
 
 class Pawn{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         this.image = '';
         if(isWhite){
             this.image = 'images/whitepawn.png';
@@ -193,8 +197,10 @@ class Pawn{
 }
 
 class Knight{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         this.image = '';
         if(isWhite){
             this.image = 'images/whiteknight.png';
@@ -206,8 +212,10 @@ class Knight{
 }
 
 class Bishop{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         this.image = '';
         if(isWhite){
             this.image = 'images/whitebishop.png';
@@ -219,8 +227,10 @@ class Bishop{
 }
 
 class Rook{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         this.image = '';
         if(isWhite){
             this.image = 'images/whiterook.png';
@@ -232,8 +242,10 @@ class Rook{
 }
 
 class King{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         this.image = '';
         if(isWhite){
             this.image = 'images/whiteking.png';
@@ -245,8 +257,10 @@ class King{
 }
 
 class Queen{
-    constructor(isWhite){
+    constructor(isWhite, row, col){
         this.isWhite = isWhite;
+        this.row = row;
+        this.col = col;
         if(isWhite){
             this.image = 'images/whitequeen.png';
         }
