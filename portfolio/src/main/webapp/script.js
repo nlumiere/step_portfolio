@@ -41,6 +41,10 @@ function visitLink(s){
     window.location.href=s;
 }
 
+
+
+
+
 //Writes a string of html
 function writeHTMLString(b){
     htmlString = '<div id = "board">';
@@ -97,8 +101,28 @@ function initializePieces(b){
         pieceSquares[4*ii+2] = b.row[6][ii];
         pieceSquares[4*ii+3] = b.row[7][ii];
     }
+
+    alert(pieceSquares[0].piece.image);
+
     return pieceSquares;
 
+}
+
+//Initializes piece elements and returns array of all pieces
+function placePieces(pieceSquares){
+    var pieceElems = new Array(32);
+    let counter = 0;
+    alert(pieceSquares[0].piece.image);
+
+    // for(p in pieceSquares){
+    //     var tempPiece = document.createElement("img");
+    //     tempPiece.setAttribute("src", p.piece.image);
+    //     tempPiece.className = "piece-element";
+    //     pieceElems[counter] = tempPiece;
+    //     counter++;
+    // }
+
+    // return pieceElems;
 }
 
 function generateBoard(){
@@ -106,9 +130,12 @@ function generateBoard(){
     b = new Board();
 
     //Draws board per htmlString
-    boardContainer.innerHTML = writeHTMLString(b);    
+    boardContainer.innerHTML = writeHTMLString(b);
     
+    //pieceSquares and pieceElems used together to control all behavior of pieces
     pieceSquares = initializePieces(b);
+    alert(pieceSquares[0].piece.image);
+    pieceElems = placePieces(boardContainer, pieceSquares);
 }
 
 class Board{
@@ -141,18 +168,12 @@ class Square{
     }
 }
 
-class Piece{
-    constructor(isWhite, b, s){
-        this.isWhite = isWhite;
-    }
-    move(row, col){
-        return false;
-    }
-}
 
-class Pawn extends Piece{
+
+class Pawn{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
+        this.image = '';
         if(isWhite){
             this.image = 'images/whitepawn.png';
         }
@@ -162,9 +183,10 @@ class Pawn extends Piece{
     }
 }
 
-class Knight extends Piece{
+class Knight{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
+        this.image = '';
         if(isWhite){
             this.image = 'images/whiteknight.png';
         }
@@ -174,9 +196,10 @@ class Knight extends Piece{
     }
 }
 
-class Bishop extends Piece{
+class Bishop{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
+        this.image = '';
         if(isWhite){
             this.image = 'images/whitebishop.png';
         }
@@ -186,21 +209,23 @@ class Bishop extends Piece{
     }
 }
 
-class Rook extends Piece{
+class Rook{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
+        this.image = '';
         if(isWhite){
-            this.image = 'images/whiterook';
+            this.image = 'images/whiterook.png';
         }
         else{
-            this.image = 'images/blackrook';
+            this.image = 'images/blackrook.png';
         }
     }
 }
 
-class King extends Piece{
+class King{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
+        this.image = '';
         if(isWhite){
             this.image = 'images/whiteking.png';
         }
@@ -210,9 +235,9 @@ class King extends Piece{
     }
 }
 
-class Queen extends Piece{
+class Queen{
     constructor(isWhite){
-        super(isWhite);
+        this.isWhite = isWhite;
         if(isWhite){
             this.image = 'images/whitequeen.png';
         }
