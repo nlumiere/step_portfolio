@@ -150,6 +150,13 @@ function generateBoard(){
     //pieceSquares and pieceElems used together to control all behavior of pieces
     pieceSquares = initializePieces(b);
     pieceElems = placePieces(boardElem, pieceSquares);
+
+    playGame(b, pieceSquares, pieceElems);
+}
+
+function playGame(){
+    const turnTrackerContainer = document.getElementById('turn-tracker-container');
+    const gameMasterContainer = document.getElementById('game-master-container');
 }
 
 class Board{

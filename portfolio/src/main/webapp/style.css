@@ -67,3 +67,11 @@
     background: transparent;
     pointer-events: none;
 }
+
+#turn-tracker-container{
+    margin-top: 20px;
+}
+
+#game-master-container{
+    display: inline-block;
+}
