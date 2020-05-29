@@ -151,8 +151,20 @@ function generateBoard(){
 }
 
 function playGame(b){
-    const turnTrackerContainer = document.getElementById('turn-tracker-container');
+    b.turnTrackerContainer = document.getElementById('turn-tracker-container');
     const gameMasterContainer = document.getElementById('game-master-container');
+    const featureContainer = document.getElementById('feature-contianer');
+}
+
+function turn(b){
+    if(b.turn == 'White'){
+        b.turn = 'Black';
+    }
+    else if(b.turn == 'Black'){
+        b.turn = 'White';
+    }
+    b.turnTrackerContainer.innerHTML = b.turn + "to move";
+    console.debug(b.turn + "'s turn");
 }
 
 class Board{
@@ -169,193 +181,202 @@ class Board{
         }
 
         this.selected_square = null;
+        
+        //White moves first
+        this.turn = 'White';
+        this.turnTrackerContainer;
     }
 
     checkLegal(square, selected_piece){
-        if(selected_piece.type == 'pawn'){
-            if(selected_piece.isWhite){
-                if(square.row == this.selected_square.row - 1 && 
-                    square.col == this.selected_square.col && !square.piece){
+        if(selected_piece.isWhite && this.turn == 'White' || 
+            !selected_piece.isWhite && this.turn == 'Black'){
 
-                    selected_piece.moved = true;
+            if(selected_piece.type == 'pawn'){
+                if(selected_piece.isWhite){
+                    if(square.row == this.selected_square.row - 1 && 
+                        square.col == this.selected_square.col && !square.piece){
+
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else if(square.row == this.selected_square.row - 2 && 
+                        square.col == this.selected_square.col && !selected_piece.moved 
+                        && !square.piece){
+                        
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else if(square.row == this.selected_square.row - 1 && 
+                        (square.col == this.selected_square.col + 1 || 
+                        square.col == this.selected_square.col - 1) &&
+                        square.piece){
+                        
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+                else{
+                    if(square.row == this.selected_square.row + 1 && 
+                        square.col == this.selected_square.col && !square.piece){
+
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else if(square.row == this.selected_square.row + 2 && 
+                        square.col == this.selected_square.col && !selected_piece.moved && 
+                        !square.piece){
+
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else if(square.row == this.selected_square.row + 1 && 
+                        (square.col == this.selected_square.col + 1 || 
+                        square.col == this.selected_square.col - 1) &&
+                        square.piece){
+                        
+                        selected_piece.moved = true;
+                        return true;
+                    }
+                    else{
+                        return false;
+                    }
+                }
+            }
+            else if(selected_piece.type == 'knight'){
+                if(square.row == this.selected_square.row - 2 && 
+                    square.col == this.selected_square.col - 1){
+
                     return true;
                 }
                 else if(square.row == this.selected_square.row - 2 && 
-                    square.col == this.selected_square.col && !selected_piece.moved 
-                    && !square.piece){
+                    square.col == this.selected_square.col + 1){
                     
-                    selected_piece.moved = true;
                     return true;
                 }
                 else if(square.row == this.selected_square.row - 1 && 
-                    (square.col == this.selected_square.col + 1 || 
-                    square.col == this.selected_square.col - 1) &&
-                    square.piece){
-                    
-                    selected_piece.moved = true;
-                    return true;
-                }
-                else{
-                    return false;
-                }
-            }
-            else{
-                if(square.row == this.selected_square.row + 1 && 
-                    square.col == this.selected_square.col && !square.piece){
+                    square.col == this.selected_square.col + 2){
 
-                    selected_piece.moved = true;
-                    return true;
-                }
-                else if(square.row == this.selected_square.row + 2 && 
-                    square.col == this.selected_square.col && !selected_piece.moved && 
-                    !square.piece){
-
-                    selected_piece.moved = true;
                     return true;
                 }
                 else if(square.row == this.selected_square.row + 1 && 
-                    (square.col == this.selected_square.col + 1 || 
-                    square.col == this.selected_square.col - 1) &&
-                    square.piece){
-                    
-                    selected_piece.moved = true;
+                    square.col == this.selected_square.col + 2){
+
+                    return true;
+                }
+                else if(square.row == this.selected_square.row + 2 && 
+                    square.col == this.selected_square.col + 1){
+
+                    return true;
+                }
+                else if(square.row == this.selected_square.row + 2 && 
+                    square.col == this.selected_square.col - 1){
+
+                    return true;
+                }
+                else if(square.row == this.selected_square.row + 1 && 
+                    square.col == this.selected_square.col - 2){
+
+                    return true;
+                }
+                else if(square.row == this.selected_square.row - 1 && 
+                    square.col == this.selected_square.col - 2){
+
                     return true;
                 }
                 else{
                     return false;
                 }
             }
-        }
-        else if(selected_piece.type == 'knight'){
-            if(square.row == this.selected_square.row - 2 && 
-                square.col == this.selected_square.col - 1){
-
-                return true;
+            else if(selected_piece.type == 'bishop'){
+                if(square.row - this.selected_square.row == square.col - this.selected_square.col){
+                    return true;
+                }
+                else if((square.row - this.selected_square.row) + (square.col - this.selected_square.col) == 0){
+                    return true;
+                }
+                return false;
             }
-            else if(square.row == this.selected_square.row - 2 && 
-                square.col == this.selected_square.col + 1){
-                
-                return true;
-            }
-            else if(square.row == this.selected_square.row - 1 && 
-                square.col == this.selected_square.col + 2){
+            else if(selected_piece.type == 'rook'){
+                if((square.row - this.selected_square.row == 0 || 
+                    square.col - this.selected_square.col == 0) && (square.row != 
+                    this.selected_square.col || square.col != this.selected_square.col)){
 
-                return true;
+                    selected_piece.moved = true;
+                    return true;
+                }
+                return false;
             }
-            else if(square.row == this.selected_square.row + 1 && 
-                square.col == this.selected_square.col + 2){
+            else if(selected_piece.type == 'queen'){
+                if(square.row - this.selected_square.row == square.col - this.selected_square.col){
+                    return true;
+                }
+                else if((square.row - this.selected_square.row) + 
+                    (square.col - this.selected_square.col) == 0){
+                    return true;
+                }
+                else if((square.row - this.selected_square.row == 0 || 
+                    square.col - this.selected_square.col == 0) && (square.row != 
+                    this.selected_square.col || square.col != this.selected_square.col)){
 
-                return true;
+                    return true;
+                }
+                return false;
             }
-            else if(square.row == this.selected_square.row + 2 && 
-                square.col == this.selected_square.col + 1){
-
-                return true;
-            }
-            else if(square.row == this.selected_square.row + 2 && 
-                square.col == this.selected_square.col - 1){
-
-                return true;
-            }
-            else if(square.row == this.selected_square.row + 1 && 
-                square.col == this.selected_square.col - 2){
-
-                return true;
-            }
-            else if(square.row == this.selected_square.row - 1 && 
-                square.col == this.selected_square.col - 2){
-
-                return true;
+            else if(selected_piece.type == 'king'){
+                if((square.row == this.selected_square.row + 1 || 
+                    square.row == this.selected_square.row - 1 || 
+                    square.col == this.selected_square.col + 1 || 
+                    square.col == this.selected_square.col - 1) &&
+                    square.row - this.selected_square.row < 2 &&
+                    square.col - this.selected_square.col < 2 &&
+                    square.row - this.selected_square.row > -2 &&
+                    square.col - this.selected_square.col > -2){
+                    
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else if(square.row == this.selected_square.row && 
+                    square.col == this.selected_col + 2){
+                    if(selected_piece.isWhite){
+                        if(!this.row[7][5].piece && !this.row[7][6].piece){
+                            selected_piece.moved = true;
+                            return 2;
+                        }
+                    }
+                    else{
+                        if(!this.row[0][5].piece && !this.row[0][6].piece){
+                            selected_piece.moved = true;
+                            return 3;
+                        }
+                    }
+                    return false;
+                }
+                else if(square.row == this.selected_square.row && 
+                    square.col == this.selected_col + 2){
+                    if(selected_piece.isWhite){
+                        if(!this.row[7][1].piece && !this.row[7][2].piece && !this.row[7][3].piece){
+                            selected_piece.moved = true;
+                            return 2;
+                        }
+                    }
+                    else{
+                        if(!this.row[0][1].piece && !this.row[0][2].piece && !this.row[0][3].piece){
+                            selected_piece.moved = true;
+                            return 3;
+                        }
+                    }
+                    return false;
+                }
+                return false;
             }
             else{
                 return false;
             }
         }
-        else if(selected_piece.type == 'bishop'){
-            if(square.row - this.selected_square.row == square.col - this.selected_square.col){
-                return true;
-            }
-            else if((square.row - this.selected_square.row) + (square.col - this.selected_square.col) == 0){
-                return true;
-            }
-            return false;
-        }
-        else if(selected_piece.type == 'rook'){
-            if((square.row - this.selected_square.row == 0 || 
-                square.col - this.selected_square.col == 0) && (square.row != 
-                this.selected_square.col || square.col != this.selected_square.col)){
-
-                selected_piece.moved = true;
-                return true;
-            }
-            return false;
-        }
-        else if(selected_piece.type == 'queen'){
-            if(square.row - this.selected_square.row == square.col - this.selected_square.col){
-                return true;
-            }
-            else if((square.row - this.selected_square.row) + 
-                (square.col - this.selected_square.col) == 0){
-                return true;
-            }
-            else if((square.row - this.selected_square.row == 0 || 
-                square.col - this.selected_square.col == 0) && (square.row != 
-                this.selected_square.col || square.col != this.selected_square.col)){
-
-                return true;
-            }
-            return false;
-        }
-        else if(selected_piece.type == 'king'){
-            if((square.row == this.selected_square.row + 1 || 
-                square.row == this.selected_square.row - 1 || 
-                square.col == this.selected_square.col + 1 || 
-                square.col == this.selected_square.col - 1) &&
-                square.row - this.selected_square.row < 2 &&
-                square.col - this.selected_square.col < 2 &&
-                square.row - this.selected_square.row > -2 &&
-                square.col - this.selected_square.col > -2){
-                
-                selected_piece.moved = true;
-                return true;
-            }
-            else if(square.row == this.selected_square.row && 
-                square.col == this.selected_col + 2){
-                if(selected_piece.isWhite){
-                    if(!this.row[7][5].piece && !this.row[7][6].piece){
-                        selected_piece.moved = true;
-                        return 2;
-                    }
-                }
-                else{
-                    if(!this.row[0][5].piece && !this.row[0][6].piece){
-                        selected_piece.moved = true;
-                        return 3;
-                    }
-                }
-                return false;
-            }
-            else if(square.row == this.selected_square.row && 
-                square.col == this.selected_col + 2){
-                if(selected_piece.isWhite){
-                    if(!this.row[7][1].piece && !this.row[7][2].piece && !this.row[7][3].piece){
-                        selected_piece.moved = true;
-                        return 2;
-                    }
-                }
-                else{
-                    if(!this.row[0][1].piece && !this.row[0][2].piece && !this.row[0][3].piece){
-                        selected_piece.moved = true;
-                        return 3;
-                    }
-                }
-                return false;
-            }
-            return false;
-        }
-        else{
-            return false;
-        }
+        return false;
     }
 
     squareClicked(square){
@@ -401,6 +422,8 @@ class Board{
                 }
 
                 this.selected_square = null;
+                //progresses the turn tracker
+                turn(b);
             }
             //castles kingside
             else if(legal == 2){
