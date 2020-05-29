@@ -135,6 +135,7 @@ function placePieces(boardElem, pieceSquares, b){
 }
 
 function generateBoard(){
+    document.getElementById('play-game').innerHTML = 'Restart Game';
     const boardContainer = document.getElementById('board-container');
     b = new Board();
 
@@ -152,8 +153,11 @@ function generateBoard(){
 
 function playGame(b){
     b.turnTrackerContainer = document.getElementById('turn-tracker-container');
-    const gameMasterContainer = document.getElementById('game-master-container');
-    const featureContainer = document.getElementById('feature-contianer');
+    b.turnTrackerContainer.innerHTML = 'White to move';
+    const featureContainer = document.getElementById('feature-container');
+    featureContainer.innerHTML = 'Notable unimplemented features: <br /> * ' + 
+        'Computer assisted check/checkmate <br /> * En passant capturing <br /> ' + 
+        '* Castling <br /> * Draw conditions';
 }
 
 function turn(b){
@@ -163,7 +167,7 @@ function turn(b){
     else if(b.turn == 'Black'){
         b.turn = 'White';
     }
-    b.turnTrackerContainer.innerHTML = b.turn + "to move";
+    b.turnTrackerContainer.innerHTML = b.turn + " to move";
     console.debug(b.turn + "'s turn");
 }
 
