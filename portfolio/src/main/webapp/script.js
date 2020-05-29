@@ -183,6 +183,9 @@ class Board{
         this.turnTrackerContainer;
     }
 
+    //Makes sure the move is legal
+    //If the piece lands on a square occupied by a friendly piece it will select the friendly piece
+    //TODO: Implement check and checkmate
     checkLegal(square, selected_piece){
         if(selected_piece.isWhite && this.turn == 'White' || 
             !selected_piece.isWhite && this.turn == 'Black'){
@@ -248,54 +251,16 @@ class Board{
                         selected_piece.moved = true;
                         return true;
                     }
-                    else{
-                        return false;
-                    }
                 }
             }
             else if(selected_piece.type == 'knight'){
-                if(square.row == this.selected_square.row - 2 && 
-                    square.col == this.selected_square.col - 1){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row - 2 && 
-                    square.col == this.selected_square.col + 1){
+                //Two vertical and one horizontal or two horizontal and one vertical
+                if((Math.abs(square.row - this.selected_square.row) == 2 &&
+                    Math.abs(square.col - this.selected_square.col) == 1) ||
+                    (Math.abs(square.row - this.selected_square.row) == 1 && 
+                    Math.abs(square.col - this.selected_square.col) == 2)){
                     
                     return true;
-                }
-                else if(square.row == this.selected_square.row - 1 && 
-                    square.col == this.selected_square.col + 2){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row + 1 && 
-                    square.col == this.selected_square.col + 2){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row + 2 && 
-                    square.col == this.selected_square.col + 1){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row + 2 && 
-                    square.col == this.selected_square.col - 1){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row + 1 && 
-                    square.col == this.selected_square.col - 2){
-
-                    return true;
-                }
-                else if(square.row == this.selected_square.row - 1 && 
-                    square.col == this.selected_square.col - 2){
-
-                    return true;
-                }
-                else{
-                    return false;
                 }
             }
             else if(selected_piece.type == 'bishop'){
@@ -305,19 +270,21 @@ class Board{
                 else if((square.row - this.selected_square.row) + (square.col - this.selected_square.col) == 0){
                     return true;
                 }
-                return false;
             }
             else if(selected_piece.type == 'rook'){
+                //There is no change in horizontal position or there is no vertical change
+                //And 
+                //the row is not the same or the column is not the same
                 if((square.row - this.selected_square.row == 0 || 
                     square.col - this.selected_square.col == 0) && (square.row != 
-                    this.selected_square.col || square.col != this.selected_square.col)){
+                    this.selected_square.row || square.col != this.selected_square.col)){
 
                     selected_piece.moved = true;
                     return true;
                 }
-                return false;
             }
             else if(selected_piece.type == 'queen'){
+                //Bishop moving patterns
                 if(square.row - this.selected_square.row == square.col - this.selected_square.col){
                     return true;
                 }
@@ -325,27 +292,24 @@ class Board{
                     (square.col - this.selected_square.col) == 0){
                     return true;
                 }
+                //Rook moving patterns
                 else if((square.row - this.selected_square.row == 0 || 
                     square.col - this.selected_square.col == 0) && (square.row != 
-                    this.selected_square.col || square.col != this.selected_square.col)){
+                    this.selected_square.row || square.col != this.selected_square.col)){
 
                     return true;
                 }
-                return false;
             }
             else if(selected_piece.type == 'king'){
-                if((square.row == this.selected_square.row + 1 || 
-                    square.row == this.selected_square.row - 1 || 
-                    square.col == this.selected_square.col + 1 || 
-                    square.col == this.selected_square.col - 1) &&
-                    square.row - this.selected_square.row < 2 &&
-                    square.col - this.selected_square.col < 2 &&
-                    square.row - this.selected_square.row > -2 &&
-                    square.col - this.selected_square.col > -2){
+                if(Math.abs(square.row - this.selected_square.row) < 2 && 
+                    Math.abs(square.col - this.selected_square.col) < 2){
                     
                     selected_piece.moved = true;
                     return true;
                 }
+
+                //Unimplemented castling feature
+                //TODO: Implement castling
                 else if(square.row == this.selected_square.row && 
                     square.col == this.selected_col + 2){
                     if(selected_piece.isWhite){
@@ -363,7 +327,7 @@ class Board{
                     return false;
                 }
                 else if(square.row == this.selected_square.row && 
-                    square.col == this.selected_col + 2){
+                    square.col == this.selected_col - 2){
                     if(selected_piece.isWhite){
                         if(!this.row[7][1].piece && !this.row[7][2].piece && !this.row[7][3].piece){
                             selected_piece.moved = true;
@@ -378,10 +342,6 @@ class Board{
                     }
                     return false;
                 }
-                return false;
-            }
-            else{
-                return false;
             }
         }
         return false;
@@ -401,19 +361,24 @@ class Board{
                 if(square.piece){
                     //if the piece is the same color as the piece on the previously selected square
                     if(square.piece.isWhite == this.selected_square.piece.isWhite){
+                        //TODO: make .moved false if the piece hasn't moved when reselecting
                         this.selected_square = square;
                         return;
                     }
                     //if the piece is not the same color (capture the piece)
                     else{
+                        //TODO: Make this a helper method
                         for(var ii = 0; ii < 32; ii++){
-                            if(this.pieceSquares[ii].row == square.row && this.pieceSquares[ii].col == square.col){
+                            if(this.pieceSquares[ii].row == square.row && 
+                                this.pieceSquares[ii].col == square.col){
+
                                 this.pieceElems[ii].style.visibility = "hidden";
                             }
                         }
                     }
                 }
                 //move the piece to the square
+                //TODO: Make this a helper method
                 square.piece = this.selected_square.piece;
                 this.selected_square.piece = null;
                 for(var ii = 0; ii < this.pieceSquares.length; ii++){
