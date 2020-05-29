@@ -53,10 +53,10 @@ function writeHTMLString(b){
         for(jj = 0; jj < 8 /* static size of board */; jj++){
             if(b.row[ii][jj].color == 'white')
                 htmlString += '<button class = "white-square" onclick="b.squareClicked(b.row[' + 
-                    ii + '][' + jj + '])"></button>';
+                    ii + '][' + jj + '], b)"></button>';
             else
                 htmlString += '<button class = "black-square" onclick="b.squareClicked(b.row[' + 
-                    ii + '][' + jj + '])"></button>';
+                    ii + '][' + jj + '], b)"></button>';
         }
         // htmlString += '<br />';
     }
@@ -115,27 +115,23 @@ function initializePieces(b){
 }
 
 //Initializes piece elements and returns array of all pieces
-function placePieces(boardElem, pieceSquares){
-    var pieceElems = new Array(32);
+function placePieces(boardElem, pieceSquares, b){
 
     var ii;
     for(ii = 0; ii < 32; ii++){
-        var tempPiece = document.createElement("img");
+        b.pieceElems[ii] = document.createElement("img");
 
         console.log("adding " + pieceSquares[ii].piece.image);
 
-        tempPiece.src = pieceSquares[ii].piece.image;
-        tempPiece.className = "piece-element";
-        pieceElems[ii] = tempPiece;
-        boardElem.appendChild(tempPiece);
-        tempPiece.style.marginLeft = "-" + 
+        b.pieceElems[ii].src = pieceSquares[ii].piece.image;
+        b.pieceElems[ii].className = "piece-element";
+        boardElem.appendChild(b.pieceElems[ii]);
+        b.pieceElems[ii].style.marginLeft = "-" + 
             ((8 - pieceSquares[ii].piece.col)*75) + "px";
-        tempPiece.style.marginTop = "-" + 
+        b.pieceElems[ii].style.marginTop = "-" + 
             ((7 - pieceSquares[ii].piece.row)*75) + "px";
         
     }
-
-    return pieceElems;
 }
 
 function generateBoard(){
@@ -148,19 +144,21 @@ function generateBoard(){
     const boardElem = document.getElementById('board');
     
     //pieceSquares and pieceElems used together to control all behavior of pieces
-    pieceSquares = initializePieces(b);
-    pieceElems = placePieces(boardElem, pieceSquares);
+    b.pieceSquares = initializePieces(b);
+    placePieces(boardElem, b.pieceSquares, b);
 
-    playGame(b, pieceSquares, pieceElems);
+    playGame(b);
 }
 
-function playGame(){
+function playGame(b){
     const turnTrackerContainer = document.getElementById('turn-tracker-container');
     const gameMasterContainer = document.getElementById('game-master-container');
 }
 
 class Board{
     constructor(){
+        this.pieceSquares = new Array(32);
+        this.pieceElems = new Array(32);
         this.row = new Array(8);
         var ii, jj;
         for(let ii = 0; ii < 8; ii++){
@@ -169,10 +167,271 @@ class Board{
                 this.row[ii][jj] = new Square(ii, jj);
             }
         }
+
+        this.selected_square = null;
     }
 
-    squareClicked(s){
-        alert(s.row + ' ' + s.col);
+    checkLegal(square, selected_piece){
+        if(selected_piece.type == 'pawn'){
+            if(selected_piece.isWhite){
+                if(square.row == this.selected_square.row - 1 && 
+                    square.col == this.selected_square.col && !square.piece){
+
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else if(square.row == this.selected_square.row - 2 && 
+                    square.col == this.selected_square.col && !selected_piece.moved 
+                    && !square.piece){
+                    
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else if(square.row == this.selected_square.row - 1 && 
+                    (square.col == this.selected_square.col + 1 || 
+                    square.col == this.selected_square.col - 1) &&
+                    square.piece){
+                    
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+            else{
+                if(square.row == this.selected_square.row + 1 && 
+                    square.col == this.selected_square.col && !square.piece){
+
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else if(square.row == this.selected_square.row + 2 && 
+                    square.col == this.selected_square.col && !selected_piece.moved && 
+                    !square.piece){
+
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else if(square.row == this.selected_square.row + 1 && 
+                    (square.col == this.selected_square.col + 1 || 
+                    square.col == this.selected_square.col - 1) &&
+                    square.piece){
+                    
+                    selected_piece.moved = true;
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        else if(selected_piece.type == 'knight'){
+            if(square.row == this.selected_square.row - 2 && 
+                square.col == this.selected_square.col - 1){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row - 2 && 
+                square.col == this.selected_square.col + 1){
+                
+                return true;
+            }
+            else if(square.row == this.selected_square.row - 1 && 
+                square.col == this.selected_square.col + 2){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row + 1 && 
+                square.col == this.selected_square.col + 2){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row + 2 && 
+                square.col == this.selected_square.col + 1){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row + 2 && 
+                square.col == this.selected_square.col - 1){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row + 1 && 
+                square.col == this.selected_square.col - 2){
+
+                return true;
+            }
+            else if(square.row == this.selected_square.row - 1 && 
+                square.col == this.selected_square.col - 2){
+
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else if(selected_piece.type == 'bishop'){
+            if(square.row - this.selected_square.row == square.col - this.selected_square.col){
+                return true;
+            }
+            else if((square.row - this.selected_square.row) + (square.col - this.selected_square.col) == 0){
+                return true;
+            }
+            return false;
+        }
+        else if(selected_piece.type == 'rook'){
+            if((square.row - this.selected_square.row == 0 || 
+                square.col - this.selected_square.col == 0) && (square.row != 
+                this.selected_square.col || square.col != this.selected_square.col)){
+
+                selected_piece.moved = true;
+                return true;
+            }
+            return false;
+        }
+        else if(selected_piece.type == 'queen'){
+            if(square.row - this.selected_square.row == square.col - this.selected_square.col){
+                return true;
+            }
+            else if((square.row - this.selected_square.row) + 
+                (square.col - this.selected_square.col) == 0){
+                return true;
+            }
+            else if((square.row - this.selected_square.row == 0 || 
+                square.col - this.selected_square.col == 0) && (square.row != 
+                this.selected_square.col || square.col != this.selected_square.col)){
+
+                return true;
+            }
+            return false;
+        }
+        else if(selected_piece.type == 'king'){
+            if((square.row == this.selected_square.row + 1 || 
+                square.row == this.selected_square.row - 1 || 
+                square.col == this.selected_square.col + 1 || 
+                square.col == this.selected_square.col - 1) &&
+                square.row - this.selected_square.row < 2 &&
+                square.col - this.selected_square.col < 2 &&
+                square.row - this.selected_square.row > -2 &&
+                square.col - this.selected_square.col > -2){
+                
+                selected_piece.moved = true;
+                return true;
+            }
+            else if(square.row == this.selected_square.row && 
+                square.col == this.selected_col + 2){
+                if(selected_piece.isWhite){
+                    if(!this.row[7][5].piece && !this.row[7][6].piece){
+                        selected_piece.moved = true;
+                        return 2;
+                    }
+                }
+                else{
+                    if(!this.row[0][5].piece && !this.row[0][6].piece){
+                        selected_piece.moved = true;
+                        return 3;
+                    }
+                }
+                return false;
+            }
+            else if(square.row == this.selected_square.row && 
+                square.col == this.selected_col + 2){
+                if(selected_piece.isWhite){
+                    if(!this.row[7][1].piece && !this.row[7][2].piece && !this.row[7][3].piece){
+                        selected_piece.moved = true;
+                        return 2;
+                    }
+                }
+                else{
+                    if(!this.row[0][1].piece && !this.row[0][2].piece && !this.row[0][3].piece){
+                        selected_piece.moved = true;
+                        return 3;
+                    }
+                }
+                return false;
+            }
+            return false;
+        }
+        else{
+            return false;
+        }
+    }
+
+    squareClicked(square){
+        // alert(`${square.row} ${square.col}`);
+
+        //if there is a previously selected square
+        if(this.selected_square){
+
+            //determine if move is legal
+            let legal = this.checkLegal(square, this.selected_square.piece);
+
+            //if the move is legal
+            if(legal == true){
+                //if there is a piece on the square
+                if(square.piece){
+                    //if the piece is the same color as the piece on the previously selected square
+                    if(square.piece.isWhite == this.selected_square.piece.isWhite){
+                        this.selected_square = square;
+                        console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
+                        return;
+                    }
+                    //if the piece is not the same color (capture the piece)
+                    else{
+                        for(var ii = 0; ii < 32; ii++){
+                            if(this.pieceSquares[ii].row == square.row && this.pieceSquares[ii].col == square.col){
+                                this.pieceElems[ii].style.visibility = "hidden";
+                                // this.pieceSquares[ii] = null;
+                            }
+                        }
+                    }
+                }
+                //move the piece to the square
+                square.piece = this.selected_square.piece;
+                this.selected_square.piece = null;
+                for(var ii = 0; ii < this.pieceSquares.length; ii++){
+                    if(this.selected_square == this.pieceSquares[ii]){
+                        this.pieceSquares[ii] = square;
+                        this.pieceElems[ii].style.marginLeft = "-" + 
+                            ((8 - square.col)*75) + "px";
+                        this.pieceElems[ii].style.marginTop = "-" + 
+                            ((7 - square.row)*75) + "px";
+                    }
+                }
+
+                this.selected_square = null;
+            }
+            //castles kingside
+            else if(legal == 2){
+
+            }
+            //castles queenside
+            else if(legal == 3){
+
+            }
+            //if the move is illegal
+            else{
+                if(square.piece){
+                    //if the piece is the same color as the piece on the previously selected square
+                    if(square.piece.isWhite == this.selected_square.piece.isWhite){
+                        this.selected_square = square;
+                        console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
+                        return;
+                    }
+                }
+                console.log("Illegal move.");
+            }
+            this.selected_square = false;
+        }
+        //if there is no previously selected square (selects a square if there's a piece on it)
+        //TODO: make it so the turn has to be correct
+        else{
+            if(square.piece){
+                this.selected_square = square;
+                console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
+            }
+        }
     }
 }
 
@@ -195,6 +454,7 @@ class Square{
 
 class Pawn{
     constructor(isWhite, row, col){
+        this.type = 'pawn';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
@@ -205,11 +465,14 @@ class Pawn{
         else{
             this.image = 'images/blackpawn.png';
         }
+
+        this.moved = false;
     }
 }
 
 class Knight{
     constructor(isWhite, row, col){
+        this.type = 'knight';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
@@ -225,6 +488,7 @@ class Knight{
 
 class Bishop{
     constructor(isWhite, row, col){
+        this.type = 'bishop';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
@@ -240,6 +504,7 @@ class Bishop{
 
 class Rook{
     constructor(isWhite, row, col){
+        this.type = 'rook';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
@@ -250,11 +515,14 @@ class Rook{
         else{
             this.image = 'images/blackrook.png';
         }
+
+        this.moved = false;
     }
 }
 
 class King{
     constructor(isWhite, row, col){
+        this.type = 'king';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
@@ -265,11 +533,14 @@ class King{
         else{
             this.image = 'images/blackking.png';
         }
+
+        this.moved = false;
     }
 }
 
 class Queen{
     constructor(isWhite, row, col){
+        this.type = 'queen';
         this.isWhite = isWhite;
         this.row = row;
         this.col = col;
