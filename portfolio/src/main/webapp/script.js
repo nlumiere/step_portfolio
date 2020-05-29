@@ -58,7 +58,6 @@ function writeHTMLString(b){
                 htmlString += '<button class = "black-square" onclick="b.squareClicked(b.row[' + 
                     ii + '][' + jj + '], b)"></button>';
         }
-        // htmlString += '<br />';
     }
     htmlString += '</div>';
 
@@ -105,11 +104,6 @@ function initializePieces(b){
         pieceSquares[4*ii+3] = b.row[7][ii];
     }
 
-    // var kk;
-    // for(kk = 0; kk < 32; kk++){
-    //     console.log(pieceSquares[kk].piece.image);
-    // }
-
     return pieceSquares;
 
 }
@@ -120,8 +114,6 @@ function placePieces(boardElem, pieceSquares, b){
     var ii;
     for(ii = 0; ii < 32; ii++){
         b.pieceElems[ii] = document.createElement("img");
-
-        console.log("adding " + pieceSquares[ii].piece.image);
 
         b.pieceElems[ii].src = pieceSquares[ii].piece.image;
         b.pieceElems[ii].className = "piece-element";
@@ -197,12 +189,16 @@ class Board{
 
             if(selected_piece.type == 'pawn'){
                 if(selected_piece.isWhite){
+
+                    //normal move
                     if(square.row == this.selected_square.row - 1 && 
                         square.col == this.selected_square.col && !square.piece){
 
                         selected_piece.moved = true;
                         return true;
                     }
+
+                    //can move twice if haven't moved
                     else if(square.row == this.selected_square.row - 2 && 
                         square.col == this.selected_square.col && !selected_piece.moved 
                         && !square.piece){
@@ -210,6 +206,8 @@ class Board{
                         selected_piece.moved = true;
                         return true;
                     }
+
+                    //captures diagnoally
                     else if(square.row == this.selected_square.row - 1 && 
                         (square.col == this.selected_square.col + 1 || 
                         square.col == this.selected_square.col - 1) &&
@@ -223,12 +221,16 @@ class Board{
                     }
                 }
                 else{
+
+                    //normal move
                     if(square.row == this.selected_square.row + 1 && 
                         square.col == this.selected_square.col && !square.piece){
 
                         selected_piece.moved = true;
                         return true;
                     }
+
+                    //can move twice if haven't moved
                     else if(square.row == this.selected_square.row + 2 && 
                         square.col == this.selected_square.col && !selected_piece.moved && 
                         !square.piece){
@@ -236,6 +238,8 @@ class Board{
                         selected_piece.moved = true;
                         return true;
                     }
+
+                    //captures diagonally
                     else if(square.row == this.selected_square.row + 1 && 
                         (square.col == this.selected_square.col + 1 || 
                         square.col == this.selected_square.col - 1) &&
@@ -384,7 +388,6 @@ class Board{
     }
 
     squareClicked(square){
-        // alert(`${square.row} ${square.col}`);
 
         //if there is a previously selected square
         if(this.selected_square){
@@ -399,7 +402,6 @@ class Board{
                     //if the piece is the same color as the piece on the previously selected square
                     if(square.piece.isWhite == this.selected_square.piece.isWhite){
                         this.selected_square = square;
-                        console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
                         return;
                     }
                     //if the piece is not the same color (capture the piece)
@@ -407,7 +409,6 @@ class Board{
                         for(var ii = 0; ii < 32; ii++){
                             if(this.pieceSquares[ii].row == square.row && this.pieceSquares[ii].col == square.col){
                                 this.pieceElems[ii].style.visibility = "hidden";
-                                // this.pieceSquares[ii] = null;
                             }
                         }
                     }
@@ -443,20 +444,17 @@ class Board{
                     //if the piece is the same color as the piece on the previously selected square
                     if(square.piece.isWhite == this.selected_square.piece.isWhite){
                         this.selected_square = square;
-                        console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
                         return;
                     }
                 }
-                console.log("Illegal move.");
+                console.debug("Illegal move.");
             }
             this.selected_square = false;
         }
         //if there is no previously selected square (selects a square if there's a piece on it)
-        //TODO: make it so the turn has to be correct
         else{
             if(square.piece){
                 this.selected_square = square;
-                console.log("Selected piece on: (" + square.row + ", " + square.col + ")");
             }
         }
     }
