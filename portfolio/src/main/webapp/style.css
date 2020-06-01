@@ -75,3 +75,8 @@
 #feature-container{
     margin-top: 40px;
 }
+
+#game-container{
+    display:inline-block;
+    margin-top:40px;
+}

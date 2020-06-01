@@ -12,14 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function addToDOM(greeting){
-    const container = document.getElementById('greeting-container2');
-    container.innerHTML = greeting;
+
+function getGame() {
+    fetch('/data').then(response => response.json()).then((game) => {
+        // stats is an object, not a string, so we have to
+        // reference its fields to create HTML content
+
+        const moveListElement = document.getElementById('game-container');
+        moveListElement.innerHTML = '';
+        moveListElement.appendChild(createListElement('Players: ' + game.players.p1 + '(white) vs ' + 
+            game.players.p2 + ' (black)'));
+        for(var ii = 0; ii < game.moves.length; ii++){
+            moveListElement.appendChild(
+                createListElement(ii + '. ' + game.moves.white + ', ' + game.moves.black));
+        }
+
+        // statsListElement.appendChild(
+        //     createListElement('Start time: ' + stats.startTime));
+        // statsListElement.appendChild(
+        //     createListElement('Current time: ' + stats.currentTime));
+        // statsListElement.appendChild(
+        //     createListElement('Max memory: ' + stats.maxMemory));
+        // statsListElement.appendChild(
+        //     createListElement('Used memory: ' + stats.usedMemory));
+    });
 }
 
-function handleResponse(response){
-    textPromise = response.text();
-    textPromise.then(addToDOM);
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
 
 /**
@@ -32,10 +54,6 @@ function addRandomGreeting() {
     //declares necessary container to display greeting
     const greetingContainer = document.getElementById('greeting-container');
     let happy = false;
-
-    var textPromise;
-    const greetingPromise = fetch('/data');
-    greetingPromise.then(textPromise = handleResponse);
     
     //Loops until the user is happy with the greeting, then displays the greeting text
     while(!happy){
