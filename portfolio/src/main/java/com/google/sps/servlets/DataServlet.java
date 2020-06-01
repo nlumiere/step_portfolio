@@ -41,8 +41,10 @@ public class DataServlet extends HttpServlet {
         response.setContentType("text/html;");
 
         Game game = new Game("Nick", "Other Nick");
-        game.moves.add(new Pair("f3", "e5"));
-        game.moves.add(new Pair("g4", "Qh4#"));
+        game.moves.add("f3");
+        game.moves.add("e5");
+        game.moves.add("g4");
+        game.moves.add("Qh4#");
         String json = convertToJsonUsingGson(game);
 
         response.getWriter().println(json);
@@ -71,15 +73,15 @@ public class Pair{
 }
 
 public class Game{
-    public ArrayList<Pair> moves;
+    public ArrayList<String> moves;
     public Pair players;
 
     public Game(){
-        this.moves = new ArrayList<Pair>();
+        this.moves = new ArrayList<String>();
     }
 
     public Game(String p1, String p2){
-        this.moves = new ArrayList<Pair>();
+        this.moves = new ArrayList<String>();
         this.players.first = p1;
         this.players.second = p2;
     }
