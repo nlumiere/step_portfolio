@@ -19,14 +19,68 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import com.google.gson.Gson;
+import java.util.ArrayList;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("<p>Hello Nick!</p>");
-  }
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;");
+        response.getWriter().println("<p>Hello Nick!</p>");
+    }
+}
+
+@WebServlet("/game")
+public class DataServlet extends HttpServlet {
+
+    @Override
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        response.setContentType("text/html;");
+
+        Game game = new Game("Nick", "Other Nick");
+        game.moves.add(new Pair("f3", "e5"));
+        game.moves.add(new Pair("g4", "Qh4#"));
+        String json = convertToJsonUsingGson(game);
+
+        response.getWriter().println(json);
+    }
+
+    private String convertToJsonUsingGson(Game game) {
+        Gson gson = new Gson();
+        String json = gson.toJson(game);
+        return json;
+    }
+}
+
+public class Pair{
+    public String first;
+    public String second;
+
+    public Pair(){
+        this.first = '';
+        this.second = '';
+    }
+
+    public Pair(String a, String b){
+        this.first = a;
+        this.second = b;
+    }
+}
+
+public class Game{
+    public ArrayList<Pair> moves;
+    public Pair players;
+
+    public Game(){
+        this.moves = new ArrayList<Pair>();
+    }
+
+    public Game(String p1, String p2){
+        this.moves = new ArrayList<Pair>();
+        this.players.first = p1;
+        this.players.second = p2;
+    }
 }
