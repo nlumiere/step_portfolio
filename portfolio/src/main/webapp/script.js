@@ -12,6 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+function addToDOM(greeting){
+    const container = document.getElementById('greeting-container2');
+    container.innerHTML = greeting;
+}
+
+function handleResponse(response){
+    textPromise = response.text();
+    textPromise.then(addToDOM);
+}
+
 /**
  * Adds a random greeting to the page.
  */
@@ -22,6 +32,10 @@ function addRandomGreeting() {
     //declares necessary container to display greeting
     const greetingContainer = document.getElementById('greeting-container');
     let happy = false;
+
+    var textPromise;
+    const greetingPromise = fetch('/data');
+    greetingPromise.then(textPromise = handleResponse);
     
     //Loops until the user is happy with the greeting, then displays the greeting text
     while(!happy){
@@ -35,6 +49,7 @@ function addRandomGreeting() {
             greetingContainer.innerText = greeting;
         }
     }
+
 }
 
 function visitLink(s){
