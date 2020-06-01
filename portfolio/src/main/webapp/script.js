@@ -397,7 +397,7 @@ class Board{
             }
             //castles kingside
             else if(legal == 2){
-
+                
             }
             //castles queenside
             else if(legal == 3){
@@ -525,6 +525,7 @@ class King{
         }
 
         this.moved = false;
+        this.inCheck = false;
     }
 }
 
