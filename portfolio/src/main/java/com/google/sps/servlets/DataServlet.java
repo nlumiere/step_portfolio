@@ -27,11 +27,12 @@ import com.google.gson.Gson;
 public class DataServlet extends HttpServlet {
 
     Game game = new Game();
+    Gson elements = new Gson();
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json;");
-        String json = new Gson().toJson(game);
+        String json = elements.toJson(game);
 
         System.out.println(json);
         response.getWriter().println(json);
@@ -40,8 +41,8 @@ public class DataServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     // If the user sends another POST request after the game is over, then start a new game.
 
-        game.players.first = request.getParameter("p1");
-        game.players.second = request.getParameter("p2");
+        game.white = request.getParameter("p1");
+        game.black = request.getParameter("p2");
         // Get the input from the form.
 
         // Redirect back to the HTML page.
@@ -50,30 +51,31 @@ public class DataServlet extends HttpServlet {
 
 }
 
-class Pair{
+class Move{
     public String first;
     public String second;
 
-    public Pair(){
+    public Move(){
         this.first = "";
         this.second = "";
     }
 
-    public Pair(String a, String b){
+    public Move(String a, String b){
         this.first = a;
         this.second = b;
     }
 }
 
 class Game{
-    public ArrayList<Pair> moves = new ArrayList<Pair>();
-    public Pair players = new Pair();
+    public ArrayList<Move> moves = new ArrayList<Move>();
+    public String white;
+    public String black;
 
     public Game(){
     }
 
     public Game(String p1, String p2){
-        this.players.first = p1;
-        this.players.second = p2;
+        this.white = p1;
+        this.black = p2;
     }
 }

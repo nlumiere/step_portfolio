@@ -19,7 +19,7 @@ function getGame() {
         // stats is an object, not a string, so we have to
         // reference its fields to create HTML content
         const playersContainer = document.getElementById('players-container');
-        playersContainer.innerText = game.players.first + ' (white) vs ' + game.players.second + ' (black)'; 
+        playersContainer.innerText = game.white + ' (white) vs ' + game.black + ' (black)'; 
         const moveListElement = document.getElementById('game-container');
         moveListElement.innerHTML = '';
         for(var ii = 0; ii < game.moves.length; ii++){
@@ -72,14 +72,6 @@ function visitLink(s){
 //Writes a string of html
 function writeHTMLString(b){
     let htmlString = '';
-    htmlString += '<div id = "players-container"></div>';
-    htmlString += '<form action = "/data" method="POST" id = "players-form">';
-    htmlString += '<p>Player One:</p>';
-    htmlString += '<input type = "text" name="p1" value = "PlayerOne"> <br />';
-    htmlString += '<p>Player Two:</p>';
-    htmlString += '<input type = "text" name = "p2" value = "PlayerTwo">';
-    htmlString += '<br /><br />';
-    htmlString += '<input type = "submit" class = "button"/></form>';
     htmlString += '<div id = "board">';
     var ii, jj;
     for(ii = 0; ii < 8 /* static size of board */; ii++){

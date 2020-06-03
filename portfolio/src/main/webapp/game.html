@@ -8,6 +8,16 @@
     </head>
     <body id = "background" onload = "getGame()">
         <div id="content">
+            <div id = "players-container"></div>
+            <form action = "/data" method="POST" id = "players-form">
+                <p>Player One:</p>
+                <input type = "text" name="p1" value = "PlayerOne"> <br />
+                <p>Player Two:</p>
+                <input type = "text" name = "p2" value = "PlayerTwo"
+                <br /><br />
+                <input type = "submit" class = "button"/>
+            </form>
+
             <div id="board-container"></div>
             <div id="turn-tracker-container"></div>
             <div id="feature-container"></div>
