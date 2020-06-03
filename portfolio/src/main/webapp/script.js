@@ -15,10 +15,11 @@
 
 function getGame() {
     fetch('/data').then(response => response.json()).then((game) => {
+        generateBoard();
         // stats is an object, not a string, so we have to
         // reference its fields to create HTML content
         const playersContainer = document.getElementById('players-container');
-        playersContainer.innerText = game.players.first + '(white) vs ' + game.players.second + ' (black)'; 
+        playersContainer.innerText = game.players.first + ' (white) vs ' + game.players.second + ' (black)'; 
         const moveListElement = document.getElementById('game-container');
         moveListElement.innerHTML = '';
         for(var ii = 0; ii < game.moves.length; ii++){
@@ -159,7 +160,6 @@ function placePieces(boardElem, pieceSquares, b){
 }
 
 function generateBoard(){
-    document.getElementById('play-game').innerHTML = 'Restart Game';
     const boardContainer = document.getElementById('board-container');
     b = new Board();
 
