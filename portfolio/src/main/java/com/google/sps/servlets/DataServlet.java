@@ -20,36 +20,34 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
+import com.google.gson.Gson;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
+    Game game = new Game();
+    game.moves.add(new Pair("f3", "e5"));
+    game.moves.add(new Pair("g4", "Qh4#"));
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("text/html;");
-        // response.getWriter().println("<p>Hello Nick!</p>");
-
-        Game game = new Game("Nick", "Other Nick");
-        game.moves.add(new Pair("f3", "e5"));
-        game.moves.add(new Pair("g4", "Qh4#"));
-        String json = convToJson(game);
+        response.setContentType("application/json;");
+        String json = new Gson().toJson(game);
 
         System.out.println(json);
         response.getWriter().println(json);
     }
 
-    private String convToJson(Game game){
-        String json = "";
-        json += "{\n\"players\": [";
-        json += "{\"p1\": \"" + game.players.first + "\", \"p2\": \"" + game.players.second;
-        json += "\"}]\n\"moves\": [";
-        for(Pair m : game.moves){
-            json += "{\"white\": \"" + m.first + "\", \"black\": \"" + m.second + "\"}";
-        }
-        json += "]\n}";
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    // If the user sends another POST request after the game is over, then start a new game.
 
-        return json;
+        game.players.first = request.getParameter("p1");
+        game.players.second = request.getParameter("p2");
+        // Get the input from the form.
+
+        // Redirect back to the HTML page.
+        response.sendRedirect("/index.html");
     }
 
 }
@@ -70,15 +68,13 @@ class Pair{
 }
 
 class Game{
-    public ArrayList<Pair> moves;
-    public Pair players;
+    public ArrayList<Pair> moves = new ArrayList<Pair>();
+    public Pair players = new Pair();
 
     public Game(){
-        this.moves = new ArrayList<Pair>();
     }
 
     public Game(String p1, String p2){
-        this.moves = new ArrayList<Pair>();
         this.players.first = p1;
         this.players.second = p2;
     }

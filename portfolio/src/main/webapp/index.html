@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body id = "background">
+  <body id = "background" onload = "getGame()">
     <div id="content">
         <img id="pic" src="./images/nick.jpg" />
         <h1>Nick's Portfolio</h1>
@@ -23,20 +23,20 @@
         <p>One thing about me: I love to run!</p>
         <p>Another thing about me: I play chess!</p>
         <button id = "play-game" class = "button" onclick = "generateBoard()">Play a Game!</button>
-        <button id = "retrieve-game" class = "button" onclick = "getGame()">Retreive Game</button>
         <div id="board-container"></div>
         <div id="turn-tracker-container"></div>
         <div id="feature-container"></div>
         <div id="game-container"></div>
         <form action = "/data" method="POST">
             <p>Player One:</p>
-            <input type = "text" value = "PlayerOne">
+            <input type = "text" name="p1" value = "PlayerOne">
             <br />
             <p>Player Two:</p> 
-            <input type = "text" value = "PlayerTwo">
+            <input type = "text" name = "p2" value = "PlayerTwo">
             <br /><br />
             <input type = "submit" class = "button"/>
         </form>
+        <div id = "players-container"></div>
 
     </div>
   </body>

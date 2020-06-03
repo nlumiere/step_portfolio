@@ -17,24 +17,14 @@ function getGame() {
     fetch('/data').then(response => response.json()).then((game) => {
         // stats is an object, not a string, so we have to
         // reference its fields to create HTML content
-
+        const playersContainer = document.getElementById('players-container');
+        playersContainer.innerText = game.players.first + '(white) vs ' + game.players.second + ' (black)'; 
         const moveListElement = document.getElementById('game-container');
         moveListElement.innerHTML = '';
-        moveListElement.appendChild(createListElement('Players: ' + game.players.p1 + '(white) vs ' + 
-            game.players.p2 + ' (black)'));
         for(var ii = 0; ii < game.moves.length; ii++){
             moveListElement.appendChild(
-                createListElement(ii + '. ' + game.moves.white + ', ' + game.moves.black));
+                createListElement(ii + '. ' + game.moves[ii].first + ', ' + game.moves[ii].second));
         }
-
-        // statsListElement.appendChild(
-        //     createListElement('Start time: ' + stats.startTime));
-        // statsListElement.appendChild(
-        //     createListElement('Current time: ' + stats.currentTime));
-        // statsListElement.appendChild(
-        //     createListElement('Max memory: ' + stats.maxMemory));
-        // statsListElement.appendChild(
-        //     createListElement('Used memory: ' + stats.usedMemory));
     });
 }
 
