@@ -70,7 +70,16 @@ function visitLink(s){
 
 //Writes a string of html
 function writeHTMLString(b){
-    htmlString = '<div id = "board">';
+    let htmlString = '';
+    htmlString += '<div id = "players-container"></div>';
+    htmlString += '<form action = "/data" method="POST" id = "players-form">';
+    htmlString += '<p>Player One:</p>';
+    htmlString += '<input type = "text" name="p1" value = "PlayerOne"> <br />';
+    htmlString += '<p>Player Two:</p>';
+    htmlString += '<input type = "text" name = "p2" value = "PlayerTwo">';
+    htmlString += '<br /><br />';
+    htmlString += '<input type = "submit" class = "button"/></form>';
+    htmlString += '<div id = "board">';
     var ii, jj;
     for(ii = 0; ii < 8 /* static size of board */; ii++){
         for(jj = 0; jj < 8 /* static size of board */; jj++){

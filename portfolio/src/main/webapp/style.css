@@ -80,3 +80,12 @@
     display:inline-block;
     margin-top:40px;
 }
+
+#players-container{
+    margin:auto;
+}
+
+#players-form{
+    float:left;
+    vertical-align:middle;
+}

@@ -27,8 +27,6 @@ import com.google.gson.Gson;
 public class DataServlet extends HttpServlet {
 
     Game game = new Game();
-    game.moves.add(new Pair("f3", "e5"));
-    game.moves.add(new Pair("g4", "Qh4#"));
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
