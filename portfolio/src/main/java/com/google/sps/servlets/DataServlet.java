@@ -45,7 +45,7 @@ public class DataServlet extends HttpServlet {
         // Get the input from the form.
 
         // Redirect back to the HTML page.
-        response.sendRedirect("/index.html");
+        response.sendRedirect("/game.html");
     }
 
 }
