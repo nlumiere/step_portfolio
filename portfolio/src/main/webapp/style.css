@@ -89,3 +89,11 @@
     float:left;
     vertical-align:middle;
 }
+
+#move-submit{
+    display:none;
+}
+
+#move-list-container{
+    display:inline-block;
+}

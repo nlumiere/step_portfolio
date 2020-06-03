@@ -174,6 +174,8 @@ function playGame(b){
     featureContainer.innerHTML = 'Notable unimplemented features: <br /> * ' + 
         'Computer assisted check/checkmate <br /> * En passant capturing <br /> ' + 
         '* Castling <br /> * Draw conditions';
+    const moveContainer = document.getElementById('move-list-container');
+    moveContainer.innerHTML = '<ol>';
 }
 
 function turn(b){
@@ -205,6 +207,7 @@ class Board{
         //White moves first
         this.turn = 'White';
         this.turnTrackerContainer;
+        this.moves = '';
     }
 
     //Makes sure the move is legal
@@ -401,6 +404,10 @@ class Board{
                         }
                     }
                 }
+
+                //Records the move
+                this.notation(square);
+
                 //move the piece to the square
                 //TODO: Make this a helper method
                 square.piece = this.selected_square.piece;
@@ -446,6 +453,38 @@ class Board{
                 this.selected_square = square;
             }
         }
+    }
+
+    notation(square){
+        var no_piece = this.expanded_notation(square);
+        var full_notation = '';
+        if(this.selected_square.piece.type == 'pawn'){
+            full_notation = no_piece;
+        }
+        else if(this.selected_square.piece.type == 'knight'){
+            full_notation = 'n' + no_piece;
+        }
+        else{
+            full_notation = this.selected_square.piece.type.charAt(0) + no_piece;
+        }
+
+        const moveContainer = document.getElementById('move-list-container');
+        moveContainer.appendChild(createListElement(full_notation));
+        document.getElementById('move-submit').value += full_notation + ' ';
+    }
+
+    //Builds the chess notation for the move just played
+    expanded_notation(square){
+        // var full_move = this.selected_square.piece.type;
+        var str = '';
+        str += String.fromCharCode(97 + this.selected_square.col);
+        str += (8 - this.selected_square.row);
+        str += '-';
+        str += String.fromCharCode(97 + square.col);
+        str += 8 - square.row;
+
+        this.moves += str;
+        return str;
     }
 }
 
