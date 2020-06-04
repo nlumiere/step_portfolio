@@ -29,23 +29,8 @@ import com.google.appengine.api.datastore.Entity;
 @WebServlet("/game")
 public class GameServlet extends HttpServlet {
 
-    Game game = new Game();
-    Gson elements = new Gson();
-
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json;");
-        String json = elements.toJson(game);
-
-        System.out.println(json);
-        response.getWriter().println(json);
-    }
-
-
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //gets input from form
-        game.moves = new ArrayList<Move>();
-
 
         Entity taskEntity = new Entity("Task");
         taskEntity.setProperty("white", request.getParameter("p1"));
@@ -60,64 +45,4 @@ public class GameServlet extends HttpServlet {
         response.sendRedirect("/game.html");
     }
 
-
-    private void parseMoves(String moveList){
-        String build = "";
-        for(int ii = 0; ii < moveList.length(); ii++){
-            if(moveList.charAt(ii) ==  ' '){
-                if(game.moves.size() == 0){
-                    game.moves.add(new Move(build, ""));
-                }
-                else if(game.moves.get(game.moves.size() - 1).second != ""){
-                    game.moves.add(new Move(build, ""));
-                }
-                else{
-                    game.moves.get(game.moves.size() - 1).second = build;
-                }
-                build = "";
-            }
-            else{
-                build += moveList.charAt(ii);
-            }
-        }
-        if(build != ""){
-            if(game.moves.get(game.moves.size() - 1).second != ""){
-                game.moves.add(new Move(build, ""));
-            }
-            else{
-                game.moves.get(game.moves.size() - 1).second = build;
-            }
-        }
-    }
-
-}
-
-class Move{
-    public String first;
-    public String second;
-
-    public Move(){
-        this.first = "";
-        this.second = "";
-    }
-
-    public Move(String a, String b){
-        this.first = a;
-        this.second = b;
-    }
-}
-
-class Game{
-    public ArrayList<Move> moves = new ArrayList<Move>();
-    public String white;
-    public String black;
-    public String result;
-
-    public Game(){
-    }
-
-    public Game(String p1, String p2){
-        this.white = p1;
-        this.black = p2;
-    }
 }
