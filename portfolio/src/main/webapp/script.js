@@ -14,19 +14,30 @@
 
 
 function getGame() {
-    fetch('/data').then(response => response.json()).then((game) => {
-        generateBoard();
+    fetch('/view-games').then(response => response.json()).then((games) => {
         // stats is an object, not a string, so we have to
         // reference its fields to create HTML content
-        const playersContainer = document.getElementById('players-container');
-        playersContainer.innerText = game.white + ' (white) vs ' + game.black + ' (black)'; 
-        const moveListElement = document.getElementById('game-container');
-        moveListElement.innerHTML = '';
-        for(var ii = 0; ii < game.moves.length; ii++){
-            moveListElement.appendChild(
-                createListElement(ii + '. ' + game.moves[ii].first + ', ' + game.moves[ii].second));
+        const allGamesContainer = document.getElementById('games-container');
+
+        for(var ii = 0; ii < games.length; ii++){
+            allGamesContainer.appendChild(createGameElement(games[ii]));
         }
     });
+}
+
+function createGameElement(game){
+    const gameElement = document.createElement('div');
+    gameElement.className = 'game-element'
+    var build = '';
+    build += '<h3>' + game.white + ' (white) vs ' + game.black + ' (black)</h3>';
+    build += '<ol>';
+    for(var ii = 0; ii < game.moves.length; ii++){
+        build += '<li>' + game.moves[ii].first + ', ' + game.moves[ii].second + '</li>';
+    }
+    build += '<p>Result: ' + game.result + '</p>';
+    gameElement.innerHTML = build;
+
+    return gameElement;
 }
 
 function createListElement(text) {
