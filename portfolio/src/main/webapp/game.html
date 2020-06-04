@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Play Chess</title>
+        <link rel="stylesheet" href="style.css">
+        <script src="script.js"></script>
+    </head>
+    <body id = "background" onload = "getGame()">
+        <div id="content">
+            <div id = "players-container"></div>
+            <form action = "/data" method="POST" id = "players-form">
+                <p>Player One:</p>
+                <input type = "text" name="p1" value = "PlayerOne"> <br />
+                <p>Player Two:</p>
+                <input type = "text" name = "p2" value = "PlayerTwo">
+                <br /><br />
+                <div id = "move-list-container"></div>
+                <input name = "moves" id = "move-submit" value = "">
+                <br /><br />
+                <input type = "text" name = "outcome" value = ".5-.5">
+                <input type = "submit" class = "button"/>
+            </form>
+
+            <div id="board-container"></div>
+            <div id="turn-tracker-container"></div>
+            <div id="feature-container"></div>
+            <div id="game-container"></div>
+            <br />
+            <button id = "retrieve-game" class = "button" onclick = "visitLink('view-games.html')">Retrieve Game</button>
+            <button id="play-game" class = "button" onclick = "visitLink('index.html')">Back</button>
+        </div>
+    </body>
+</html>

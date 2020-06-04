@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body id = "background">
+  <body id = "background" onload = "getGame()">
     <div id="content">
         <img id="pic" src="./images/nick.jpg" />
         <h1>Nick's Portfolio</h1>
@@ -19,14 +19,10 @@
       
         <button class = "button" onclick="addRandomGreeting()">Hello</button>
         <div id="greeting-container"></div>
-        <div id="greeting-container2"></div>
         <br />
         <p>One thing about me: I love to run!</p>
         <p>Another thing about me: I play chess!</p>
-        <button id = "play-game" class = "button" onclick = "generateBoard()">Play a game!</button>
-        <div id="board-container"></div>
-        <div id="turn-tracker-container"></div>
-        <div id="feature-container"></div>
+        <button id = "play-game" class = "button" onclick = "visitLink('game.html')">Play a Game!</button>
 
     </div>
   </body>

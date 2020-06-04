@@ -75,3 +75,25 @@
 #feature-container{
     margin-top: 40px;
 }
+
+#game-container{
+    display:inline-block;
+    margin-top:40px;
+}
+
+#players-container{
+    margin:auto;
+}
+
+#players-form{
+    float:left;
+    vertical-align:middle;
+}
+
+#move-submit{
+    display:none;
+}
+
+#move-list-container{
+    display:inline-block;
+}

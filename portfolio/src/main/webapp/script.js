@@ -12,14 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-function addToDOM(greeting){
-    const container = document.getElementById('greeting-container2');
-    container.innerHTML = greeting;
+
+function getGame() {
+    fetch('/data').then(response => response.json()).then((game) => {
+        generateBoard();
+        // stats is an object, not a string, so we have to
+        // reference its fields to create HTML content
+        const playersContainer = document.getElementById('players-container');
+        playersContainer.innerText = game.white + ' (white) vs ' + game.black + ' (black)'; 
+        const moveListElement = document.getElementById('game-container');
+        moveListElement.innerHTML = '';
+        for(var ii = 0; ii < game.moves.length; ii++){
+            moveListElement.appendChild(
+                createListElement(ii + '. ' + game.moves[ii].first + ', ' + game.moves[ii].second));
+        }
+    });
 }
 
-function handleResponse(response){
-    textPromise = response.text();
-    textPromise.then(addToDOM);
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
 
 /**
@@ -32,10 +45,6 @@ function addRandomGreeting() {
     //declares necessary container to display greeting
     const greetingContainer = document.getElementById('greeting-container');
     let happy = false;
-
-    var textPromise;
-    const greetingPromise = fetch('/data');
-    greetingPromise.then(textPromise = handleResponse);
     
     //Loops until the user is happy with the greeting, then displays the greeting text
     while(!happy){
@@ -62,7 +71,8 @@ function visitLink(s){
 
 //Writes a string of html
 function writeHTMLString(b){
-    htmlString = '<div id = "board">';
+    let htmlString = '';
+    htmlString += '<div id = "board">';
     var ii, jj;
     for(ii = 0; ii < 8 /* static size of board */; ii++){
         for(jj = 0; jj < 8 /* static size of board */; jj++){
@@ -142,7 +152,6 @@ function placePieces(boardElem, pieceSquares, b){
 }
 
 function generateBoard(){
-    document.getElementById('play-game').innerHTML = 'Restart Game';
     const boardContainer = document.getElementById('board-container');
     b = new Board();
 
@@ -165,6 +174,8 @@ function playGame(b){
     featureContainer.innerHTML = 'Notable unimplemented features: <br /> * ' + 
         'Computer assisted check/checkmate <br /> * En passant capturing <br /> ' + 
         '* Castling <br /> * Draw conditions';
+    const moveContainer = document.getElementById('move-list-container');
+    moveContainer.innerHTML = '<ol>';
 }
 
 function turn(b){
@@ -196,6 +207,7 @@ class Board{
         //White moves first
         this.turn = 'White';
         this.turnTrackerContainer;
+        this.moves = '';
     }
 
     //Makes sure the move is legal
@@ -392,6 +404,10 @@ class Board{
                         }
                     }
                 }
+
+                //Records the move
+                this.notation(square);
+
                 //move the piece to the square
                 //TODO: Make this a helper method
                 square.piece = this.selected_square.piece;
@@ -437,6 +453,38 @@ class Board{
                 this.selected_square = square;
             }
         }
+    }
+
+    notation(square){
+        var no_piece = this.expanded_notation(square);
+        var full_notation = '';
+        if(this.selected_square.piece.type == 'pawn'){
+            full_notation = no_piece;
+        }
+        else if(this.selected_square.piece.type == 'knight'){
+            full_notation = 'n' + no_piece;
+        }
+        else{
+            full_notation = this.selected_square.piece.type.charAt(0) + no_piece;
+        }
+
+        const moveContainer = document.getElementById('move-list-container');
+        moveContainer.appendChild(createListElement(full_notation));
+        document.getElementById('move-submit').value += full_notation + ' ';
+    }
+
+    //Builds the chess notation for the move just played
+    expanded_notation(square){
+        // var full_move = this.selected_square.piece.type;
+        var str = '';
+        str += String.fromCharCode(97 + this.selected_square.col);
+        str += (8 - this.selected_square.row);
+        str += '-';
+        str += String.fromCharCode(97 + square.col);
+        str += 8 - square.row;
+
+        this.moves += str;
+        return str;
     }
 }
 
