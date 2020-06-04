@@ -81,10 +81,6 @@
     margin-top:40px;
 }
 
-#players-container{
-    margin:auto;
-}
-
 #players-form{
     float:left;
     vertical-align:middle;
@@ -95,5 +91,14 @@
 }
 
 #move-list-container{
+    display:inline-block;
+}
+
+#games-container{
+    height: 70%;
+}
+
+.game-element{
+    width:200px;
     display:inline-block;
 }
