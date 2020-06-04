@@ -21,10 +21,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
-@WebServlet("/data")
-public class DataServlet extends HttpServlet {
+@WebServlet("/game")
+public class GameServlet extends HttpServlet {
 
     Game game = new Game();
     Gson elements = new Gson();
@@ -38,15 +41,53 @@ public class DataServlet extends HttpServlet {
         response.getWriter().println(json);
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // If the user sends another POST request after the game is over, then start a new game.
 
-        game.white = request.getParameter("p1");
-        game.black = request.getParameter("p2");
-        // Get the input from the form.
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //gets input from form
+        game.moves = new ArrayList<Move>();
+
+
+        Entity taskEntity = new Entity("Task");
+        taskEntity.setProperty("white", request.getParameter("p1"));
+        taskEntity.setProperty("black", request.getParameter("p2"));
+        taskEntity.setProperty("result", request.getParameter("outcome"));
+        taskEntity.setProperty("moves", request.getParameter("moves"));
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        datastore.put(taskEntity);
 
         // Redirect back to the HTML page.
         response.sendRedirect("/game.html");
+    }
+
+
+    private void parseMoves(String moveList){
+        String build = "";
+        for(int ii = 0; ii < moveList.length(); ii++){
+            if(moveList.charAt(ii) ==  ' '){
+                if(game.moves.size() == 0){
+                    game.moves.add(new Move(build, ""));
+                }
+                else if(game.moves.get(game.moves.size() - 1).second != ""){
+                    game.moves.add(new Move(build, ""));
+                }
+                else{
+                    game.moves.get(game.moves.size() - 1).second = build;
+                }
+                build = "";
+            }
+            else{
+                build += moveList.charAt(ii);
+            }
+        }
+        if(build != ""){
+            if(game.moves.get(game.moves.size() - 1).second != ""){
+                game.moves.add(new Move(build, ""));
+            }
+            else{
+                game.moves.get(game.moves.size() - 1).second = build;
+            }
+        }
     }
 
 }
@@ -70,6 +111,7 @@ class Game{
     public ArrayList<Move> moves = new ArrayList<Move>();
     public String white;
     public String black;
+    public String result;
 
     public Game(){
     }
