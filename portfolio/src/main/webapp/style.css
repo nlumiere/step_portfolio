@@ -101,4 +101,7 @@
 .game-element{
     width:200px;
     display:inline-block;
+    vertical-align: top;
+    margin-left:20px;
+    margin-right:20px;
 }
