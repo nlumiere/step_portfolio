@@ -8,6 +8,10 @@
     </head>
     <body id = "background" onload = "getGame()">
         <div id="content">
+            <form action = "/view-games" method="POST" id = "players-form">
+                <input type ="text" name = "search" value = "Search by Player Name">
+                <input type = "submit" class = "button"/>
+            </form>
             <div id ="games-container"></div>
             <button id = "retrieve-game" class = "button" onclick = "visitLink('game.html')">Play</button>
             <button id="play-game" class = "button" onclick = "visitLink('index.html')">Home</button>
