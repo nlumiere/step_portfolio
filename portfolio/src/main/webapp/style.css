@@ -96,9 +96,14 @@
 
 #games-container{
     height: 70%;
+    margin-top:50px;
+    margin-bottom:50px;
 }
 
 .game-element{
     width:200px;
     display:inline-block;
+    vertical-align: top;
+    margin-left:20px;
+    margin-right:20px;
 }

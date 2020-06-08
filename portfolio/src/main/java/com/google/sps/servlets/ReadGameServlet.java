@@ -32,7 +32,15 @@ import com.google.appengine.api.datastore.Query.SortDirection;
 @WebServlet("/view-games")
 public class ReadGameServlet extends HttpServlet {
 
-    Game game = new Game();
+    String searchTerm;
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        //gets input from form
+        searchTerm = request.getParameter("search");
+
+        // Redirect back to the HTML page.
+        response.sendRedirect("/view-games.html");
+    }
 
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -43,24 +51,25 @@ public class ReadGameServlet extends HttpServlet {
 
         List<Game> games = new ArrayList<>();
         for(Entity entity :results.asIterable()){
-            game = new Game();
-            game.white = (String)entity.getProperty("white");
-            game.black = (String)entity.getProperty("black");
-            game.result = (String)entity.getProperty("result");
-            parseMoves((String)entity.getProperty("moves"));
-            
-            games.add(game);
+            String w = (String)entity.getProperty("white");
+            String b = (String)entity.getProperty("black");
+            if(w.equals(searchTerm) || b.equals(searchTerm)){
+                Game game = new Game(w, b);
+                game.result = (String)entity.getProperty("result");
+                parseMoves((String)entity.getProperty("moves"), game);
+                
+                games.add(game);
+            }
         }
 
         Gson gson = new Gson();
         String json = gson.toJson(games);
 
         response.setContentType("application/json;");
-        System.out.println(json);
         response.getWriter().println(json);
     }
 
-    private void parseMoves(String moveList){
+    private void parseMoves(String moveList, Game game){
         String build = "";
         for(int ii = 0; ii < moveList.length(); ii++){
             if(moveList.charAt(ii) ==  ' '){
