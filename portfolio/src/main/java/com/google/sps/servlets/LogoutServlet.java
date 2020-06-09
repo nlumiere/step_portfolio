@@ -27,11 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/logout")
 public class LogoutServlet extends HttpServlet {
 
+    UserService userService = UserServiceFactory.getUserService();
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         // PrintWriter out = response.getWriter();
-        UserService userService = UserServiceFactory.getUserService();
 
         if(userService.isUserLoggedIn()){
             String logoutUrl = userService.createLogoutURL("/index.html");
@@ -39,7 +40,7 @@ public class LogoutServlet extends HttpServlet {
             return;
         }
 
-        response.sendRedirect(request.getServletPath());
+        response.sendRedirect("/index.html");
 
     }
 

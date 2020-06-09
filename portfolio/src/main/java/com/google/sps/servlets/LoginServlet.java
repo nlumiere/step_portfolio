@@ -27,11 +27,12 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/login")
 public class LoginServlet extends HttpServlet {
 
+    UserService userService = UserServiceFactory.getUserService();
+
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("text/html");
         // PrintWriter out = response.getWriter();
-        UserService userService = UserServiceFactory.getUserService();
 
         if(!userService.isUserLoggedIn()){
             String loginUrl = userService.createLoginURL("/index.html");
