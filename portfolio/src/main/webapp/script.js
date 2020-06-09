@@ -35,6 +35,7 @@ function createGameElement(game){
     gameElement.className = 'game-element'
     var build = '';
     build += '<h3>' + game.white + ' (white) vs ' + game.black + ' (black)</h3>';
+    build += '<h4> Game by: ' + game.userEmail + '</h4>';
     build += '<ol>';
     for(var ii = 0; ii < game.moves.length; ii++){
         build += '<li>' + game.moves[ii].first + ', ' + game.moves[ii].second + '</li>';

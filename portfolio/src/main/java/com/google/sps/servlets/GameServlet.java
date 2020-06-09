@@ -25,6 +25,9 @@ import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/game")
 public class GameServlet extends HttpServlet {
@@ -32,7 +35,10 @@ public class GameServlet extends HttpServlet {
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //gets input from form
 
+        UserService userService = UserServiceFactory.getUserService();
+
         Entity taskEntity = new Entity("Task");
+        taskEntity.setProperty("email", userService.getCurrentUser().getEmail());
         taskEntity.setProperty("white", request.getParameter("p1"));
         taskEntity.setProperty("black", request.getParameter("p2"));
         taskEntity.setProperty("result", request.getParameter("outcome"));
