@@ -13,6 +13,11 @@
 // limitations under the License.
 
 
+function userAuth(){
+    visitLink("/login");
+}
+
+
 function getGame() {
     fetch('/view-games').then(response => response.json()).then((games) => {
         // stats is an object, not a string, so we have to
