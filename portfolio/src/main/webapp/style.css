@@ -110,7 +110,7 @@
 
 #map{
     margin-top:10%;
-    height:40%;
-    padding-top:100%;
+    width:500px;
+    height:500px;
     border:solid black;
 }
