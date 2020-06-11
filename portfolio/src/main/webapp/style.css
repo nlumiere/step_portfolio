@@ -107,3 +107,10 @@
     margin-left:20px;
     margin-right:20px;
 }
+
+#map{
+    margin-top:10%;
+    height:40%;
+    padding-top:100%;
+    border:solid black;
+}

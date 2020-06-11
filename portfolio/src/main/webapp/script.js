@@ -624,4 +624,24 @@ class Queen{
     }
 }
 
+function createMap() {
+    var lati = Math.random()*90;
+    var long = Math.random()*180;
+    var temp = Math.random()
+    if(temp < .25){
+        lati *= -1;
+        long *= -1;
+    }
+    else if(temp < .5){
+        lati *= -1;
+    }
+    else if(temp < .75){
+        long *= -1;
+    }
+
+    const map = new google.maps.Map(
+        document.getElementById('map'),
+        {center: {lat: lati, lng: long}, zoom: 16});
+}
+
 
