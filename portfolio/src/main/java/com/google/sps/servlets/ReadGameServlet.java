@@ -57,6 +57,7 @@ public class ReadGameServlet extends HttpServlet {
                 Game game = new Game(w, b);
                 game.result = (String)entity.getProperty("result");
                 parseMoves((String)entity.getProperty("moves"), game);
+                game.userEmail = (String)entity.getProperty("email");
                 
                 games.add(game);
             }
@@ -119,6 +120,7 @@ class Game{
     public String white;
     public String black;
     public String result;
+    public String userEmail;
 
     public Game(){
     }

@@ -35,6 +35,7 @@ function createGameElement(game){
     gameElement.className = 'game-element'
     var build = '';
     build += '<h3>' + game.white + ' (white) vs ' + game.black + ' (black)</h3>';
+    build += '<h4> Game by: ' + game.userEmail + '</h4>';
     build += '<ol>';
     for(var ii = 0; ii < game.moves.length; ii++){
         build += '<li>' + game.moves[ii].first + ', ' + game.moves[ii].second + '</li>';
@@ -621,6 +622,105 @@ class Queen{
             this.image = 'images/blackqueen.png';
         }
     }
+}
+
+function createMap() {
+    var lati = Math.random()*90;
+    var long = Math.random()*180;
+    var temp = Math.random()
+    if(temp < .25){
+        lati *= -1;
+        long *= -1;
+    }
+    else if(temp < .5){
+        lati *= -1;
+    }
+    else if(temp < .75){
+        long *= -1;
+    }
+
+    const map = new google.maps.Map(
+        document.getElementById('map'),
+        {center: {lat: lati, lng: long}, zoom: 16, styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#fecae4'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#fecae4'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#49525f'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#323b48'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#fecae4'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ]});
 }
 
 

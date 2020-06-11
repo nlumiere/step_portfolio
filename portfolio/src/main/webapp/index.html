@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <title>Nick's Portfolio</title>
     <link rel="stylesheet" href="style.css">
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDuc9LUfW2xFbz9gmQMlQzQbLs-3_f98WA"></script>
     <script src="script.js"></script>
   </head>
-  <body id = "background" onload = "getGame()">
+  <body id="background" onload="createMap();">
     <div id="content">
-        <img id="pic" src="./images/nick.jpg" />
+        <img id="pic" src="./images/nick.jpg"/>
         <h1>Nick's Portfolio</h1>
         <p>My name is Nicholas Lumiere. I'm 19 years old and I live in Seattle,
            WA. I study computer science at CU Boulder. I am a Google STEP intern
             (quarantine edition) which is why this page exists. </p>
-        <button class = "button" onclick="visitLink('https://www.linkedin.com/in/nicholas-lumiere-926867187/')">LinkedIn</button>
-        <button class = "button" onclick="visitLink('https://www.github.com/nlumiere/')">GitHub</button>
+        <button class="button" onclick="visitLink('https://www.linkedin.com/in/nicholas-lumiere-926867187/')">LinkedIn</button>
+        <button class="button" onclick="visitLink('https://www.github.com/nlumiere/')">GitHub</button>
         <p>Click here to get a random greeting:</p>
       
         <button class = "button" onclick="addRandomGreeting()">Hello</button>
@@ -22,8 +23,8 @@
         <br />
         <p>One thing about me: I love to run!</p>
         <p>Another thing about me: I play chess!</p>
-        <button id = "play-game" class = "button" onclick = "userAuth()">Play a Game!</button>
-
+        <button id="play-game" class="button" onclick="userAuth()">Play a Game!</button>
+        <div id="map"></div>
     </div>
   </body>
 </html>
