@@ -15,9 +15,52 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.ArrayList;
 
 public final class FindMeetingQuery {
-  public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-    throw new UnsupportedOperationException("TODO: Implement this method.");
-  }
+
+    private Collection<TimeRange> invert(Collection<TimeRange> booked_times, long requestDuration){
+        Collection<TimeRange> possible_times = new ArrayList<TimeRange>();
+        int firstTime = 0;
+        for(TimeRange tr : booked_times){
+            TimeRange free = TimeRange.fromStartEnd(firstTime, tr.start(), false);
+            firstTime = tr.start() + tr.duration();
+            if(free.duration() >= requestDuration)
+                possible_times.add(free);
+        }
+        TimeRange endOfDay = TimeRange.fromStartEnd(firstTime, 1440, false);
+        if(endOfDay.duration() >= requestDuration){
+            possible_times.add(endOfDay);
+        }
+        
+        return possible_times;
+    }
+
+    public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
+        Collection<TimeRange> booked_times = new ArrayList<TimeRange>();
+        Collection<TimeRange> possible_times;
+        
+        //Checks to ensure valid MeetingRequest duration
+        if(request.getDuration() > TimeRange.WHOLE_DAY.duration())
+            return new ArrayList<TimeRange>();
+
+        for(Event e : events){
+            //Returns empty collection if an event is invalid duration
+            if(e.getWhen().duration() > TimeRange.WHOLE_DAY.duration())
+                return new ArrayList<TimeRange>();
+            
+            booked_times.add(e.getWhen());
+        }
+        if(booked_times.isEmpty()){
+            possible_times = new ArrayList<TimeRange>();
+            possible_times.add(TimeRange.WHOLE_DAY);
+            return possible_times;
+        }
+        //TODO: Sort booked_times by start
+        //TODO: merge overlapping booked times
+
+        possible_times = invert(booked_times, request.getDuration());
+
+        return possible_times;
+    }
 }
