@@ -46,7 +46,9 @@ public final class FindMeetingQuery {
 
     // This method doesn't seem efficient. I'd appreciate suggestions
     // TODO: Refactor for efficiency
-    private ArrayList<TimeRange> checkTimes(Collection<Event> events, MeetingRequest request, boolean optionalCheck){
+    private ArrayList<TimeRange> checkTimes(Collection<Event> events, 
+        MeetingRequest request, boolean optionalCheck){
+
         ArrayList<TimeRange> booked_times = new ArrayList<TimeRange>();
         for(Event e : events){
             //Adds the time slot to booked times if it pertains to request people
@@ -58,9 +60,11 @@ public final class FindMeetingQuery {
                     boolean overlap = false;
                     for(int ii = 0; ii < booked_times.size(); ii++){
                         TimeRange bt = booked_times.get(ii);
-                        if(bt.overlaps(e.getWhen()) || bt.end() == e.getWhen().start() || bt.start() == e.getWhen().end()){
+                        if(bt.overlaps(e.getWhen()) || bt.end() == e.getWhen().start() || 
+                            bt.start() == e.getWhen().end()){
                             overlap = true;
-                            TimeRange newTime = TimeRange.fromStartEnd(Math.min(e.getWhen().start(), bt.start()),
+                            TimeRange newTime = 
+                                TimeRange.fromStartEnd(Math.min(e.getWhen().start(), bt.start()),
                                 Math.max(e.getWhen().end(), bt.end()), false);
                             booked_times.set(ii, newTime);
                         }
@@ -106,7 +110,8 @@ public final class FindMeetingQuery {
     
         possible_times = invert(booked_times, request.getDuration());
 
-        if(possible_times.isEmpty() && !request.getOptionalAttendees().isEmpty()){
+        if(possible_times.isEmpty() && !request.getOptionalAttendees().isEmpty() 
+            && !request.getAttendees().isEmpty()){
             booked_times = checkTimes(events, request, false);
         }
 
