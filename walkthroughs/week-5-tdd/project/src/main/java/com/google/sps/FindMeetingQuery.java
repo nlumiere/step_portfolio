@@ -20,7 +20,7 @@ import java.util.Set;
 
 public final class FindMeetingQuery {
 
-    long WHOLE_DAY_LENGTH = 1440;
+    int WHOLE_DAY_LENGTH = 1440;
 
     // Only works with sorted, non-overlapping time ranges
     // checkTimes prepares data
@@ -111,13 +111,14 @@ public final class FindMeetingQuery {
             return possibleTimes;
         }
 
+        possibleTimes = invert(bookedTimes, request.getDuration());
+
         // If there are no possible times, checks only for mandatory attendees
         if(possibleTimes.isEmpty() && !request.getOptionalAttendees().isEmpty() 
             && !request.getAttendees().isEmpty()){
             bookedTimes = checkTimes(events, request, false);
+            possibleTimes = invert(bookedTimes, request.getDuration());
         }
-
-        possibleTimes = invert(bookedTimes, request.getDuration());
 
         return possibleTimes;
     }
