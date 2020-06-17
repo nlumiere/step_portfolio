@@ -20,28 +20,30 @@ import java.util.Set;
 
 public final class FindMeetingQuery {
 
+    long WHOLE_DAY_LENGTH = 1440;
+
     // Only works with sorted, non-overlapping time ranges
     // checkTimes prepares data
-    private Collection<TimeRange> invert(Collection<TimeRange> booked_times, long requestDuration){
-        Collection<TimeRange> possible_times = new ArrayList<TimeRange>();
+    private Collection<TimeRange> invert(Collection<TimeRange> bookedTimes, long requestDuration){
+        Collection<TimeRange> possibleTimes = new ArrayList<TimeRange>();
         int firstTime = 0;
-        for(TimeRange tr : booked_times){
+        for(TimeRange tr : bookedTimes){
             TimeRange free = TimeRange.fromStartEnd(firstTime, tr.start(), false);
 
             // Ensures a meeting ending before the endpoint of a previous meeting cannot allow
             // an invalid meeting to be scheduled
-            if(tr.start() + tr.duration() > firstTime)
-                firstTime = tr.start() + tr.duration();
+            if(tr.end() > firstTime)
+                firstTime = tr.end();
 
             if(free.duration() >= requestDuration)
-                possible_times.add(free);
+                possibleTimes.add(free);
         }
-        TimeRange endOfDay = TimeRange.fromStartEnd(firstTime, 1440, false);
+        TimeRange endOfDay = TimeRange.fromStartEnd(firstTime, WHOLE_DAY_LENGTH, false);
         if(endOfDay.duration() >= requestDuration){
-            possible_times.add(endOfDay);
+            possibleTimes.add(endOfDay);
         }
         
-        return possible_times;
+        return possibleTimes;
     }
 
     // This method doesn't seem efficient. I'd appreciate suggestions
@@ -49,7 +51,7 @@ public final class FindMeetingQuery {
     private ArrayList<TimeRange> checkTimes(Collection<Event> events, 
         MeetingRequest request, boolean optionalCheck){
 
-        ArrayList<TimeRange> booked_times = new ArrayList<TimeRange>();
+        ArrayList<TimeRange> bookedTimes = new ArrayList<TimeRange>();
         for(Event e : events){
             //Adds the time slot to booked times if it pertains to request people
             Set<String> people = e.getAttendees();
@@ -58,15 +60,15 @@ public final class FindMeetingQuery {
                     (request.getOptionalAttendees().contains(person) && optionalCheck)){
                     
                     boolean overlap = false;
-                    for(int ii = 0; ii < booked_times.size(); ii++){
-                        TimeRange bt = booked_times.get(ii);
+                    for(int ii = 0; ii < bookedTimes.size(); ii++){
+                        TimeRange bt = bookedTimes.get(ii);
                         if(bt.overlaps(e.getWhen()) || bt.end() == e.getWhen().start() || 
                             bt.start() == e.getWhen().end()){
                             overlap = true;
                             TimeRange newTime = 
                                 TimeRange.fromStartEnd(Math.min(e.getWhen().start(), bt.start()),
                                 Math.max(e.getWhen().end(), bt.end()), false);
-                            booked_times.set(ii, newTime);
+                            bookedTimes.set(ii, newTime);
                         }
                     }
                     if(!overlap){
@@ -74,49 +76,49 @@ public final class FindMeetingQuery {
                         TimeRange temp;
                         // Sorts meeting by start time
                         // Can't have overlap
-                        for(int ii = 0; ii < booked_times.size(); ii++){
-                            TimeRange bt = booked_times.get(ii);
+                        for(int ii = 0; ii < bookedTimes.size(); ii++){
+                            TimeRange bt = bookedTimes.get(ii);
                             if(newTime.start() < bt.start()){
                                 temp = bt;
-                                booked_times.set(ii, newTime);
+                                bookedTimes.set(ii, newTime);
                                 newTime = temp;
                             }
                         }
-                        booked_times.add(newTime);
+                        bookedTimes.add(newTime);
                     }
                     break;
                 }
             }
         }
-        return booked_times;
+        return bookedTimes;
     }
 
     //Expects sorted Collection
     public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
-        ArrayList<TimeRange> booked_times = new ArrayList<TimeRange>();
-        Collection<TimeRange> possible_times;
+        ArrayList<TimeRange> bookedTimes = new ArrayList<TimeRange>();
+        Collection<TimeRange> possibleTimes;
         
         //Checks to ensure valid MeetingRequest duration
         if(request.getDuration() > TimeRange.WHOLE_DAY.duration())
             return new ArrayList<TimeRange>();
 
-        booked_times = checkTimes(events, request, true);
+        //Checks for mandatory and optional attendees
+        bookedTimes = checkTimes(events, request, true);
 
-        if(booked_times.isEmpty()){
-            possible_times = new ArrayList<TimeRange>();
-            possible_times.add(TimeRange.WHOLE_DAY);
-            return possible_times;
+        if(bookedTimes.isEmpty()){
+            possibleTimes = new ArrayList<TimeRange>();
+            possibleTimes.add(TimeRange.WHOLE_DAY);
+            return possibleTimes;
         }
-    
-        possible_times = invert(booked_times, request.getDuration());
 
-        if(possible_times.isEmpty() && !request.getOptionalAttendees().isEmpty() 
+        // If there are no possible times, checks only for mandatory attendees
+        if(possibleTimes.isEmpty() && !request.getOptionalAttendees().isEmpty() 
             && !request.getAttendees().isEmpty()){
-            booked_times = checkTimes(events, request, false);
+            bookedTimes = checkTimes(events, request, false);
         }
 
-        possible_times = invert(booked_times, request.getDuration());
+        possibleTimes = invert(bookedTimes, request.getDuration());
 
-        return possible_times;
+        return possibleTimes;
     }
 }
