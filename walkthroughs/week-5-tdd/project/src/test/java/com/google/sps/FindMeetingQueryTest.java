@@ -414,5 +414,22 @@ public final class FindMeetingQueryTest {
 
         Assert.assertEquals(expected, actual);
     }
+
+    @Test
+    public void noPeople(){
+        // No one is here
+        //
+        // Day      : |-------------------|
+
+        Collection<Event> events = Arrays.asList();
+
+        MeetingRequest request = new MeetingRequest(Arrays.asList(), DURATION_30_MINUTES);
+
+        Collection<TimeRange> actual = query.query(events, request);
+        Collection<TimeRange> expected =
+            Arrays.asList(TimeRange.WHOLE_DAY);
+
+        Assert.assertEquals(expected, actual);
+    }
 }
 
