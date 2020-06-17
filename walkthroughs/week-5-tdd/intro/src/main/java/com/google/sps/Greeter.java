@@ -21,16 +21,7 @@ public class Greeter {
   /**
    * Returns a greeting for the given name.
    */
-    public String greet(String name) {
-        String modName = "";
-        for(int ii = 0; ii < name.length(); ii++){
-            if(!(name.charAt(ii) == ' ' && modName == "")){
-                modName += name.charAt(ii);
-            }
-        }
-        while(modName.charAt(modName.length()-1) == ' '){
-            modName = modName.substring(0, modName.length()-1);
-        }
-        return "Hello " + modName;
-    }
+  public String greet(String name) {
+    return "Hello " + name;
+  }
 }

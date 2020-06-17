@@ -26,14 +26,8 @@ public final class GreeterTest {
   public void testGreeting() {
     Greeter greeter = new Greeter();
 
-    String greeting = greeter.greet("   Ada   ");
+    String greeting = greeter.greet("Ada");
 
     Assert.assertEquals("Hello Ada", greeting);
-  }
-
-  @Test public void testGreeting2(){
-      Greeter greeter = new Greeter();
-      String greeting = greeter.greet("bob joe");
-      Assert.assertEquals("Hello bob joe", greeting);
   }
 }
