@@ -32,8 +32,7 @@ public final class FindMeetingQuery {
 
             // Ensures a meeting ending before the endpoint of a previous meeting cannot allow
             // an invalid meeting to be scheduled
-            if(tr.end() > firstTime)
-                firstTime = tr.end();
+            firstTime = tr.end();
 
             if(free.duration() >= requestDuration)
                 possibleTimes.add(free);
@@ -104,12 +103,6 @@ public final class FindMeetingQuery {
 
         //Checks for mandatory and optional attendees
         bookedTimes = checkTimes(events, request, true);
-
-        if(bookedTimes.isEmpty()){
-            possibleTimes = new ArrayList<TimeRange>();
-            possibleTimes.add(TimeRange.WHOLE_DAY);
-            return possibleTimes;
-        }
 
         possibleTimes = invert(bookedTimes, request.getDuration());
 
