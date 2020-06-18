@@ -15,6 +15,8 @@
 package com.google.sps;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -51,42 +53,30 @@ public final class FindMeetingQuery {
         MeetingRequest request, boolean optionalCheck){
 
         ArrayList<TimeRange> bookedTimes = new ArrayList<TimeRange>();
+
+        // Gets all time ranges
         for(Event e : events){
             //Adds the time slot to booked times if it pertains to request people
             Set<String> people = e.getAttendees();
             for(String person : people){
                 if(request.getAttendees().contains(person) || 
                     (request.getOptionalAttendees().contains(person) && optionalCheck)){
-                    
-                    boolean overlap = false;
-                    for(int ii = 0; ii < bookedTimes.size(); ii++){
-                        TimeRange bt = bookedTimes.get(ii);
-                        if(bt.overlaps(e.getWhen()) || bt.end() == e.getWhen().start() || 
-                            bt.start() == e.getWhen().end()){
-                            overlap = true;
-                            TimeRange newTime = 
-                                TimeRange.fromStartEnd(Math.min(e.getWhen().start(), bt.start()),
-                                Math.max(e.getWhen().end(), bt.end()), false);
-                            bookedTimes.set(ii, newTime);
-                        }
-                    }
-                    if(!overlap){
-                        TimeRange newTime = e.getWhen();
-                        TimeRange temp;
-                        // Sorts meeting by start time
-                        // Can't have overlap
-                        for(int ii = 0; ii < bookedTimes.size(); ii++){
-                            TimeRange bt = bookedTimes.get(ii);
-                            if(newTime.start() < bt.start()){
-                                temp = bt;
-                                bookedTimes.set(ii, newTime);
-                                newTime = temp;
-                            }
-                        }
-                        bookedTimes.add(newTime);
-                    }
-                    break;
+
+                    bookedTimes.add(e.getWhen());
                 }
+            }
+        }
+        Collections.sort(bookedTimes, new TimeRangeCompare());
+        int ii = 0;
+        while(ii < bookedTimes.size() - 1){
+            if(bookedTimes.get(ii).overlaps(bookedTimes.get(ii+1))){
+                TimeRange tr = TimeRange.fromStartEnd(bookedTimes.get(ii).start(), 
+                    Math.max(bookedTimes.get(ii).end(), bookedTimes.get(ii+1).end()), false);
+                bookedTimes.set(ii, tr);
+                bookedTimes.remove(ii+1);
+            }
+            else{
+                ii++;
             }
         }
         return bookedTimes;
@@ -114,5 +104,14 @@ public final class FindMeetingQuery {
         }
 
         return possibleTimes;
+    }
+}
+
+// Comparator class for Collections.sort to use to compare TimeRange objects
+class TimeRangeCompare implements Comparator<TimeRange>{
+
+    @Override
+    public int compare(TimeRange tr1, TimeRange tr2){
+        return Integer.compare(tr1.start(), tr2.start());
     }
 }
