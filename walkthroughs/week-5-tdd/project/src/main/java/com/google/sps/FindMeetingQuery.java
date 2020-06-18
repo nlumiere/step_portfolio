@@ -66,7 +66,10 @@ public final class FindMeetingQuery {
                 }
             }
         }
+        // Sorts unavailable time slots by start time
         Collections.sort(bookedTimes, new TimeRangeCompare());
+
+        //Merges overlapping time slots into one longer time slot
         int ii = 0;
         while(ii < bookedTimes.size() - 1){
             if(bookedTimes.get(ii).overlaps(bookedTimes.get(ii+1))){
